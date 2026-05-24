@@ -146,6 +146,9 @@ function FlowAGuest({ raffle, errorParam }: { raffle: Raffle; errorParam?: "paym
           <p className="text-sm text-brand-ink/60 max-w-xl mx-auto">
             Win the <em>{raffle.prize_short}</em>. Choose how you'd like to enter.
           </p>
+          <p className="text-xs text-brand-ink/50 mt-2">
+            Winner's choice: claim the piece or its cash value.
+          </p>
         </div>
       </section>
 

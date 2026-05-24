@@ -57,8 +57,7 @@ export function SiteHeader() {
             </Link>
           )}
           <Link
-            to={user ? "/enter" : "/login"}
-            search={user ? undefined : { redirect: "/enter" }}
+            to="/enter"
             className="bg-brand-ink text-brand-cream px-8 py-3 rounded-full hover:bg-brand-gold transition-colors duration-300"
           >
             Enter Now

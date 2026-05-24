@@ -47,7 +47,6 @@ function RaffleListPage() {
 
 function Card({ r }: { r: Raffle }) {
   const c = useCountdown(r.draw_date);
-  const { user } = useAuth();
   return (
     <div className="group block bg-white border border-brand-taupe hover:border-brand-ink transition-colors">
       <div className="relative overflow-hidden">

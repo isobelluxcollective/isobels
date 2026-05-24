@@ -39,7 +39,13 @@ export function SiteFooter() {
           <span>© {new Date().getFullYear()} Isobel Raffles Ltd.</span>
           <span>Please Raffle Responsibly · 18+</span>
         </div>
-      </div>
-    </footer>
+        <div className="mt-10 pt-6 border-t border-brand-cream/10">
+          <p className="text-[11px] leading-relaxed text-brand-cream/35 max-w-4xl">
+            Please note that Isobel draws are not a charity raffle or lottery but a prize draw.
+            Our draws include a free postal method of entry. No purchase is necessary to enter.
+            Isobel draws are operated in compliance with UK competition law.
+          </p>
+        </div>
+
   );
 }

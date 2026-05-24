@@ -74,7 +74,7 @@ function EnterPage() {
           </h1>
           <p className="text-sm text-brand-ink/60 mb-12">Select one of our live raffles below.</p>
           <div className="grid md:grid-cols-2 gap-6">
-            {live.map((r) => (
+            {live.map((r: Raffle) => (
               <Link
                 key={r.id}
                 to="/enter"

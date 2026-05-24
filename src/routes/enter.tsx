@@ -80,25 +80,25 @@ function EnterPage() {
 
       <section className="py-16 md:py-20 bg-brand-cream">
         <div className="container mx-auto px-6 max-w-4xl">
-          {/* Tabs */}
-          <div className="flex flex-wrap border-b border-brand-taupe mb-12 justify-center gap-x-8 sm:gap-x-12 gap-y-2">
+          <div className="grid grid-cols-3 border-y border-brand-taupe mb-12">
             {[
               { id: "postal", label: "Postal", sub: "No purchase necessary" },
               { id: "oneoff", label: "Single Purchase", sub: "£10 per ticket" },
-              { id: "subscription", label: "Subscription", sub: "Best value · cancel anytime" },
+              { id: "subscription", label: "Subscription", sub: "Best value" },
             ].map((t) => (
               <button
                 key={t.id}
                 type="button"
                 onClick={() => setTab(t.id as Tab)}
                 className={cn(
-                  "pb-4 border-b-2 text-xs uppercase tracking-[0.2em] font-bold transition-all",
+                  "py-5 px-3 border-b-2 -mb-px text-center transition-all",
                   tab === t.id
-                    ? "border-brand-ink text-brand-ink"
-                    : "border-transparent text-brand-ink/40 hover:text-brand-ink",
+                    ? "border-brand-ink bg-white"
+                    : "border-transparent text-brand-ink/50 hover:text-brand-ink hover:bg-white/40",
                 )}
               >
-                {t.label}
+                <span className="block font-serif text-base md:text-xl italic mb-1">{t.label}</span>
+                <span className="block text-[10px] uppercase tracking-[0.18em] opacity-70">{t.sub}</span>
               </button>
             ))}
           </div>
@@ -124,6 +124,12 @@ function EnterPage() {
   );
 }
 
+function scrollToForm() {
+  if (typeof document === "undefined") return;
+  const el = document.getElementById("entrant-form");
+  if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
 function SubscriptionPanel({
   selected,
   onSelect,
@@ -137,46 +143,60 @@ function SubscriptionPanel({
         const isSelected = selected === t.id;
         const isPopular = "popular" in t && t.popular;
         return (
-          <button
+          <div
             key={t.id}
-            type="button"
-            onClick={() => onSelect(t.id)}
             className={cn(
-              "p-8 text-center transition-colors relative flex flex-col items-center",
+              "relative flex flex-col text-center transition-colors border",
               isSelected
-                ? "bg-brand-ink text-brand-cream"
-                : "border border-brand-taupe hover:border-brand-gold bg-white text-brand-ink",
+                ? "border-brand-ink shadow-lg"
+                : "border-brand-taupe hover:border-brand-gold",
             )}
           >
             {isPopular && (
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-brand-gold text-brand-cream text-[9px] px-3 py-1 uppercase tracking-tighter">
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-brand-gold text-brand-cream text-[9px] px-3 py-1 uppercase tracking-[0.2em] font-bold z-10">
                 Most Popular
               </div>
             )}
-            <span
-              className={cn(
-                "text-[10px] uppercase tracking-widest mb-4",
-                isSelected ? "text-brand-gold" : "text-brand-gold",
-              )}
-            >
-              {t.label}
-            </span>
-            <h3 className="font-serif text-3xl mb-2 italic">£{t.price}</h3>
-            <p className={cn("text-xs mb-2", isSelected ? "text-brand-cream/60" : "text-brand-ink/60")}>
-              per month
-            </p>
-            <p className={cn("text-xs", isSelected ? "text-brand-cream/80" : "text-brand-ink/80")}>
-              {t.entries} entries per draw
-            </p>
-            <div
-              className={cn(
-                "mt-6 w-full py-3 text-[10px] uppercase tracking-widest font-bold",
-                isSelected ? "bg-brand-gold text-brand-ink" : "bg-brand-cream border border-brand-ink/10",
-              )}
-            >
-              {isSelected ? "Selected" : "Choose Plan"}
+
+            {/* Top dark block: entries + price */}
+            <div className="bg-brand-ink text-brand-cream pt-10 pb-8 px-6">
+              <span className="block text-[10px] uppercase tracking-[0.25em] text-brand-gold mb-3">
+                {t.label}
+              </span>
+              <p className="font-serif text-3xl md:text-4xl italic text-brand-gold mb-2">
+                {t.entries} entries
+              </p>
+              <p className="text-sm text-brand-cream/70 mb-4">into every monthly draw</p>
+              <p>
+                <span className="font-serif text-5xl">£{t.price}</span>
+                <span className="text-sm text-brand-cream/70">/month</span>
+              </p>
             </div>
-          </button>
+
+            {/* Bottom bullets + CTA */}
+            <div className="bg-white p-6 flex-1 flex flex-col">
+              <ul className="text-sm text-brand-ink/80 space-y-2 text-left mb-6">
+                <li>· Cancel any time</li>
+                <li>· {t.entries} entries every draw</li>
+                <li>· Priority winner announcements</li>
+              </ul>
+              <button
+                type="button"
+                onClick={() => {
+                  onSelect(t.id);
+                  scrollToForm();
+                }}
+                className={cn(
+                  "mt-auto w-full py-4 text-[10px] uppercase tracking-[0.25em] font-bold transition-colors",
+                  isSelected
+                    ? "bg-brand-gold text-brand-ink"
+                    : "bg-brand-ink text-brand-cream hover:bg-brand-gold hover:text-brand-ink",
+                )}
+              >
+                {isSelected ? "Selected — Enter Details" : "Enter Now"}
+              </button>
+            </div>
+          </div>
         );
       })}
     </div>

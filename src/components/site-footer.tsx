@@ -46,6 +46,8 @@ export function SiteFooter() {
             Isobel draws are operated in compliance with UK competition law.
           </p>
         </div>
-
+      </div>
+    </footer>
   );
 }
+

@@ -341,6 +341,9 @@ function FlowBLoggedIn({
           <p className="text-sm text-brand-ink/60 max-w-xl mx-auto">
             Win the <em>{raffle.prize_short}</em>.
           </p>
+          <p className="text-xs text-brand-ink/50 mt-2">
+            Winner's choice: claim the piece or its cash value.
+          </p>
         </div>
       </section>
 

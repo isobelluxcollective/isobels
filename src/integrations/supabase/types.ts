@@ -38,6 +38,81 @@ export type Database = {
         }
         Relationships: []
       }
+      raffles: {
+        Row: {
+          created_at: string
+          description: string
+          draw_date: string
+          draw_number: string
+          featured: boolean
+          hero_image_url: string
+          id: string
+          italic: string
+          odds: string
+          prize_name: string
+          prize_short: string
+          retail_value: string
+          sort_order: number
+          status: string
+          ticket_price: number
+          title: string
+          updated_at: string
+          winner_city: string | null
+          winner_first_name: string | null
+          winner_image_url: string | null
+          winner_instagram: string | null
+          winner_quote: string | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string
+          draw_date: string
+          draw_number: string
+          featured?: boolean
+          hero_image_url?: string
+          id?: string
+          italic?: string
+          odds?: string
+          prize_name: string
+          prize_short: string
+          retail_value?: string
+          sort_order?: number
+          status?: string
+          ticket_price?: number
+          title: string
+          updated_at?: string
+          winner_city?: string | null
+          winner_first_name?: string | null
+          winner_image_url?: string | null
+          winner_instagram?: string | null
+          winner_quote?: string | null
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          draw_date?: string
+          draw_number?: string
+          featured?: boolean
+          hero_image_url?: string
+          id?: string
+          italic?: string
+          odds?: string
+          prize_name?: string
+          prize_short?: string
+          retail_value?: string
+          sort_order?: number
+          status?: string
+          ticket_price?: number
+          title?: string
+          updated_at?: string
+          winner_city?: string | null
+          winner_first_name?: string | null
+          winner_image_url?: string | null
+          winner_instagram?: string | null
+          winner_quote?: string | null
+        }
+        Relationships: []
+      }
       subscriptions: {
         Row: {
           cancel_at_period_end: boolean | null
@@ -86,6 +161,27 @@ export type Database = {
         }
         Relationships: []
       }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -95,9 +191,16 @@ export type Database = {
         Args: { check_env?: string; user_uuid: string }
         Returns: boolean
       }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -224,6 +327,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+    },
   },
 } as const

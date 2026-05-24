@@ -107,13 +107,24 @@ export function SiteHeader() {
                 Sign up
               </Link>
             )}
-            <Link
-              to="/enter"
-              onClick={() => setOpen(false)}
-              className="bg-brand-ink text-brand-cream text-center px-8 py-4 rounded-full mt-2"
-            >
-              Enter Now
-            </Link>
+            <div className="flex flex-col gap-3 pt-2">
+              <Link
+                to="/auth"
+                search={{ redirect: "/enter", mode: "signup" }}
+                onClick={() => setOpen(false)}
+                className="border border-brand-ink text-brand-ink bg-transparent text-center px-8 py-4 rounded-full hover:bg-brand-ink/5 transition-colors"
+              >
+                Sign Up
+              </Link>
+              <Link
+                to="/auth"
+                search={{ redirect: "/enter", mode: "signin" }}
+                onClick={() => setOpen(false)}
+                className="bg-brand-ink text-brand-cream text-center px-8 py-4 rounded-full hover:bg-brand-gold transition-colors"
+              >
+                Log In
+              </Link>
+            </div>
           </nav>
         </div>
       )}

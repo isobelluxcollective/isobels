@@ -533,15 +533,15 @@ function EntrantForm({
 
         <button
           type="submit"
-          disabled={submitting}
           className="w-full bg-brand-ink text-brand-cream py-5 text-xs uppercase tracking-widest font-bold hover:bg-brand-gold transition-colors disabled:opacity-60"
         >
-          {submitting
-            ? "Processing…"
-            : tab === "subscription"
-              ? `Subscribe — £${tier?.price}/mo`
-              : `Continue to Payment — £${(quantity * currentRaffle.ticketPrice).toFixed(2)}`}
+          {tab === "subscription"
+            ? `Continue — Subscribe £${tier?.price}/mo`
+            : `Continue to Payment — £${(quantity * currentRaffle.ticketPrice).toFixed(2)}`}
         </button>
+        {errors.form && (
+          <p className="text-xs text-destructive text-center">{errors.form}</p>
+        )}
 
         <p className="text-[10px] text-brand-ink/40 text-center leading-relaxed">
           Secure checkout powered by Stripe. Your card details are never stored by Isobel.

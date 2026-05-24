@@ -97,17 +97,17 @@ function HomePage() {
               {
                 n: "01",
                 t: "Choose a draw",
-                d: "Multiple luxury draws every week. Pick the prize that calls to you and enter from £10.",
+                d: "Every week, a single exceptional luxury piece enters the draw — hand-sourced from the world's leading houses and independently authenticated. Pick the prize that calls to you. Every winner may choose to receive the piece itself or its full cash equivalent.",
               },
               {
                 n: "02",
-                t: "Support a cause",
-                d: "5% of all profits are donated to charity, supporting causes close to the Isobel community.",
+                t: "Choose how to enter",
+                d: "Enter from £10 per ticket — the more tickets you hold, the greater your chances. Prefer not to purchase? Every Isobel draw includes a completely free postal entry route, by law and by principle. Postal entries are limited to one entry per postcard sent. No purchase is ever necessary to win.",
               },
               {
                 n: "03",
                 t: "Await the draw",
-                d: "A single winner per draw, announced by email. One name, one prize, full transparency.",
+                d: "When the draw closes, one winner is chosen at random and verified independently. Every entry holds a unique verifiable number — full transparency, always. The winner is notified by email and has their choice of the prize or its cash value. One name. One prize. No exceptions.",
               },
             ].map((s) => (
               <div key={s.n} className="space-y-4">

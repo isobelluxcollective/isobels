@@ -4,7 +4,7 @@ import aboutCraft from "@/assets/about-craft.jpg";
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
-      { title: "About Isobel — Luxury Raffles with a Conscience" },
+      { title: "About Isobel — Luxury Draws with a Conscience" },
       {
         name: "description",
         content:

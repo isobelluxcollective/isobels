@@ -19,7 +19,7 @@ export function SiteFooter() {
             <div className="font-serif text-4xl text-brand-cream mb-6 italic">Isobel.</div>
             <p className="text-xs leading-relaxed max-w-sm">
               A curated space for those who appreciate the finer things. We make luxury accessible
-              through exclusive raffles, while donating 5% of all profits to charity.
+              through exclusive draws, while donating 5% of all profits to charity.
             </p>
           </div>
           <div className="flex flex-col space-y-4 text-[11px] uppercase tracking-[0.2em] font-medium text-brand-cream/70">
@@ -27,7 +27,7 @@ export function SiteFooter() {
               Our Story
             </Link>
             <Link to="/raffle" className="hover:text-brand-gold transition-colors">
-              Current Raffles
+              Current Draws
             </Link>
             <Link to="/winners" className="hover:text-brand-gold transition-colors">
               Past Winners
@@ -64,12 +64,12 @@ export function SiteFooter() {
 
         </div>
         <div className="mt-20 pt-8 border-t border-brand-cream/5 flex justify-between items-center text-[9px] uppercase tracking-[0.3em]">
-          <span>© {new Date().getFullYear()} Isobel Raffles Ltd.</span>
-          <span>Please Raffle Responsibly · 18+</span>
+          <span>© {new Date().getFullYear()} Isobel Draws Ltd.</span>
+          <span>Please Draw Responsibly · 18+</span>
         </div>
         <div className="mt-10 pt-6 border-t border-brand-cream/10">
           <p className="text-[11px] leading-relaxed text-brand-cream/35 max-w-4xl">
-            Please note that Isobel draws are not a charity raffle or lottery but a prize draw.
+            Please note that Isobel draws are not a charity draw or lottery but a prize draw.
             Our draws include a free postal method of entry. No purchase is necessary to enter.
             Isobel draws are operated in compliance with UK competition law.
             The winner may elect to receive the cash value equivalent of the prize in lieu of the physical item.

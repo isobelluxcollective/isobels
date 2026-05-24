@@ -7,9 +7,9 @@ import { useCountdown } from "@/lib/countdown";
 export const Route = createFileRoute("/raffle")({
   head: () => ({
     meta: [
-      { title: "Live Raffles — Isobel" },
-      { name: "description", content: "Browse every live luxury raffle at Isobel." },
-      { property: "og:title", content: "Live Raffles — Isobel" },
+      { title: "Live Draws — Isobel" },
+      { name: "description", content: "Browse every live luxury draw at Isobel." },
+      { property: "og:title", content: "Live Draws — Isobel" },
       { property: "og:description", content: "All currently open luxury draws." },
     ],
   }),
@@ -26,13 +26,13 @@ function RaffleListPage() {
           <p className="text-[10px] uppercase tracking-[0.3em] text-brand-gold font-semibold mb-3">
             Open now
           </p>
-          <h1 className="font-serif text-5xl md:text-6xl italic text-brand-ink">Live Raffles</h1>
+          <h1 className="font-serif text-5xl md:text-6xl italic text-brand-ink">Live Draws</h1>
           <p className="text-sm text-brand-ink/60 mt-3">
             {raffles.length} {raffles.length === 1 ? "draw" : "draws"} currently open.
           </p>
         </div>
         {raffles.length === 0 ? (
-          <p className="text-brand-ink/60 italic">No live raffles right now. Check back soon.</p>
+          <p className="text-brand-ink/60 italic">No live draws right now. Check back soon.</p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             {raffles.map((r) => (
@@ -61,7 +61,7 @@ function Card({ r }: { r: Raffle }) {
         <div className="absolute top-3 left-3 bg-white px-3 py-1 text-[10px] uppercase tracking-widest text-brand-ink font-bold z-10">
           £{r.ticket_price}
         </div>
-        <div className="absolute inset-0 bg-brand-ink/45 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center gap-3 px-6">
+        <div className="absolute inset-0 bg-brand-ink/45 opacity-100 group-hover:opacity-100 [@media(hover:hover)]:opacity-0 transition-opacity duration-300 flex flex-col items-center justify-center gap-3 px-6 z-20">
           <Link
             to="/enter"
             search={{ raffle: r.id }}

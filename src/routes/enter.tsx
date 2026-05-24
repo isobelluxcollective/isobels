@@ -46,14 +46,14 @@ export const Route = createFileRoute("/enter")({
   head: () => ({
     meta: [
       { title: "Enter a Draw — Isobel" },
-      { name: "description", content: "Choose a luxury raffle and enter from £10." },
+      { name: "description", content: "Choose a luxury draw and enter from £10." },
     ],
   }),
   notFoundComponent: () => (
     <div className="py-24 text-center">
-      <p className="font-serif text-3xl italic">Raffle not found</p>
+      <p className="font-serif text-3xl italic">Draw not found</p>
       <Link to="/raffle" className="text-xs uppercase tracking-widest underline mt-4 inline-block">
-        Back to live raffles
+        Back to live draws
       </Link>
     </div>
   ),
@@ -72,7 +72,7 @@ function EnterPage() {
           <h1 className="font-serif text-4xl md:text-5xl text-brand-ink mb-4">
             Choose a draw to enter
           </h1>
-          <p className="text-sm text-brand-ink/60 mb-12">Select one of our live raffles below.</p>
+          <p className="text-sm text-brand-ink/60 mb-12">Select one of our live draws below.</p>
           <div className="grid md:grid-cols-2 gap-6">
             {live.map((r: Raffle) => (
               <Link

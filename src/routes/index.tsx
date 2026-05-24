@@ -11,12 +11,12 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Enter weekly draws to win iconic designer handbags and jewellery. Multiple live raffles every week. 5% of profits to charity.",
+          "Enter weekly draws to win iconic designer handbags and jewellery. Multiple live draws every week. 5% of profits to charity.",
       },
-      { property: "og:title", content: "Isobel — Luxury Designer Raffles" },
+      { property: "og:title", content: "Isobel — Luxury Designer Draws" },
       {
         property: "og:description",
-        content: "Multiple live luxury raffles every week. 5% of profits to charity.",
+        content: "Multiple live luxury draws every week. 5% of profits to charity.",
       },
     ],
   }),
@@ -70,7 +70,7 @@ function HomePage() {
                   All Live Draws
                 </h2>
                 <p className="text-[11px] uppercase tracking-widest text-brand-ink/50 mt-2">
-                  {live.length} {live.length === 1 ? "raffle" : "raffles"} currently open
+                  {live.length} {live.length === 1 ? "draw" : "draws"} currently open
                 </p>
               </div>
             </div>
@@ -97,7 +97,7 @@ function HomePage() {
               {
                 n: "01",
                 t: "Choose a draw",
-                d: "Multiple luxury raffles every week. Pick the prize that calls to you and enter from £10.",
+                d: "Multiple luxury draws every week. Pick the prize that calls to you and enter from £10.",
               },
               {
                 n: "02",
@@ -180,7 +180,7 @@ function EmptyState() {
       <p className="font-serif text-2xl italic text-brand-ink/60 mb-2">
         No live draws right now
       </p>
-      <p className="text-sm text-brand-ink/50">New raffles announced soon.</p>
+      <p className="text-sm text-brand-ink/50">New draws announced soon.</p>
     </div>
   );
 }
@@ -205,7 +205,7 @@ function HeroCarousel({ raffles }: { raffles: Raffle[] }) {
               key={r.id}
               type="button"
               onClick={() => setIndex(i)}
-              aria-label={`Show raffle ${i + 1}`}
+              aria-label={`Show draw ${i + 1}`}
               className={`h-1 transition-all ${
                 i === index ? "w-12 bg-brand-ink" : "w-6 bg-brand-ink/20 hover:bg-brand-ink/40"
               }`}

@@ -96,7 +96,7 @@ export function SiteHeader() {
                 onClick={handleSignOut}
                 className="text-left text-brand-ink hover:text-brand-gold py-2 uppercase tracking-[0.2em]"
               >
-                Sign out
+                Sign Out
               </button>
             ) : (
               <Link
@@ -105,26 +105,38 @@ export function SiteHeader() {
                 onClick={() => setOpen(false)}
                 className="text-brand-ink hover:text-brand-gold py-2"
               >
-                Sign up
+                Sign Up
               </Link>
             )}
             <div className="flex flex-col gap-3 pt-2">
-              <Link
-                to="/auth"
-                search={{ redirect: "/enter", mode: "signup" }}
-                onClick={() => setOpen(false)}
-                className="border border-brand-ink text-brand-ink bg-transparent text-center px-8 py-4 rounded-full hover:bg-brand-ink/5 transition-colors"
-              >
-                Sign Up
-              </Link>
-              <Link
-                to="/login"
-                search={{ redirect: "/members" }}
-                onClick={() => setOpen(false)}
-                className="bg-brand-ink text-brand-cream text-center px-8 py-4 rounded-full hover:bg-brand-gold transition-colors"
-              >
-                Log In
-              </Link>
+              {user ? (
+                <Link
+                  to="/members"
+                  onClick={() => setOpen(false)}
+                  className="border border-brand-ink text-brand-ink bg-transparent text-center px-8 py-4 rounded-full hover:bg-brand-ink/5 transition-colors"
+                >
+                  My Account
+                </Link>
+              ) : (
+                <>
+                  <Link
+                    to="/auth"
+                    search={{ redirect: "/enter", mode: "signup" }}
+                    onClick={() => setOpen(false)}
+                    className="border border-brand-ink text-brand-ink bg-transparent text-center px-8 py-4 rounded-full hover:bg-brand-ink/5 transition-colors"
+                  >
+                    Sign Up
+                  </Link>
+                  <Link
+                    to="/login"
+                    search={{ redirect: "/members" }}
+                    onClick={() => setOpen(false)}
+                    className="bg-brand-ink text-brand-cream text-center px-8 py-4 rounded-full hover:bg-brand-gold transition-colors"
+                  >
+                    Log In
+                  </Link>
+                </>
+              )}
             </div>
           </nav>
         </div>

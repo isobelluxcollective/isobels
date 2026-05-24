@@ -61,6 +61,9 @@ function RaffleDetailPage() {
             {r.prize_name}
           </h1>
           <p className="text-base text-brand-ink/70 leading-relaxed max-w-prose">{r.description}</p>
+          <p className="text-xs text-brand-ink/50 italic -mt-4">
+            The winner may choose to receive this piece or its full cash value equivalent.
+          </p>
 
           <dl className="grid grid-cols-2 gap-6 border-t border-b border-brand-ink/10 py-6">
             <div>

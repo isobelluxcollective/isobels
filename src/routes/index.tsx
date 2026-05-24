@@ -20,7 +20,7 @@ export const Route = createFileRoute("/")({
       },
     ],
   }),
-  loader: async () => {
+  loader: async (): Promise<{ featured: Raffle[]; live: Raffle[] }> => {
     const [featured, live] = await Promise.all([getFeaturedRaffles(), getLiveRaffles()]);
     return { featured: featured.length ? featured : live.slice(0, 3), live };
   },

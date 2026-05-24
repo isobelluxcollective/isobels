@@ -4,7 +4,7 @@ import { pastWinners } from "@/lib/raffle-data";
 export const Route = createFileRoute("/winners")({
   head: () => ({
     meta: [
-      { title: "Past Winners — Isobel Raffles" },
+      { title: "Past Winners — Isobel Draws" },
       {
         name: "description",
         content:

@@ -72,6 +72,7 @@ export function SiteFooter() {
             Please note that Isobel draws are not a charity raffle or lottery but a prize draw.
             Our draws include a free postal method of entry. No purchase is necessary to enter.
             Isobel draws are operated in compliance with UK competition law.
+            The winner may elect to receive the cash value equivalent of the prize in lieu of the physical item.
           </p>
         </div>
       </div>

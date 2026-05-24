@@ -299,10 +299,13 @@ function FlowBLoggedIn({
   errorParam?: "payment_failed";
   onSignOut: () => Promise<unknown>;
 }) {
+  const { session } = useAuth();
+  const authReady = typeof window !== "undefined" && !!session?.access_token;
   const fetchMembers = useServerFn(getMembersData);
   const membersQuery = useQuery({
     queryKey: ["members-data"],
     queryFn: () => fetchMembers(),
+    enabled: authReady,
   });
 
   const balance = membersQuery.data?.profile?.ticket_balance ?? 0;
@@ -425,7 +428,8 @@ function ConfirmationCard({
   mode: "subscription" | "oneoff" | "tickets";
 }) {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, session } = useAuth();
+  const authReady = typeof window !== "undefined" && !!session?.access_token;
   const tier = plan in TIER_ONEOFF_PRICE ? TIER_ONEOFF_PRICE[plan as keyof typeof TIER_ONEOFF_PRICE] : null;
 
   // Saved card lookup (oneoff only)
@@ -433,7 +437,7 @@ function ConfirmationCard({
   const pmQuery = useQuery({
     queryKey: ["saved-pm"],
     queryFn: () => fetchPm({ data: { environment: getStripeEnvironment() } }),
-    enabled: mode === "oneoff",
+    enabled: authReady && mode === "oneoff",
   });
 
   // Ticket cap check (tickets mode)
@@ -442,7 +446,7 @@ function ConfirmationCard({
   const infoQuery = useQuery({
     queryKey: ["draw-info", raffle.id],
     queryFn: () => fetchInfo({ data: { raffleId: raffle.id } }),
-    enabled: mode === "tickets",
+    enabled: authReady && mode === "tickets",
   });
 
   const enterFn = useServerFn(enterDrawWithTickets);

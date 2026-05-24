@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { getLiveRaffles } from "@/lib/raffles.functions";
 import type { Raffle } from "@/lib/raffle-data";
 import { useCountdown } from "@/lib/countdown";
+import { useAuth } from "@/hooks/use-auth";
 
 export const Route = createFileRoute("/raffle")({
   head: () => ({
@@ -46,6 +47,7 @@ function RaffleListPage() {
 
 function Card({ r }: { r: Raffle }) {
   const c = useCountdown(r.draw_date);
+  const { user } = useAuth();
   return (
     <div className="group block bg-white border border-brand-taupe hover:border-brand-ink transition-colors">
       <div className="relative overflow-hidden">
@@ -61,13 +63,23 @@ function Card({ r }: { r: Raffle }) {
           £{r.ticket_price}
         </div>
         <div className="absolute inset-0 bg-brand-ink/45 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center gap-3 px-6">
-          <Link
-            to="/enter"
-            search={{ raffle: r.id }}
-            className="w-full max-w-[200px] text-center bg-brand-ink text-brand-cream px-6 py-3 rounded-full text-[10px] uppercase tracking-[0.2em] font-bold hover:bg-brand-gold transition-colors"
-          >
-            Enter Now
-          </Link>
+          {user ? (
+            <Link
+              to="/enter"
+              search={{ raffle: r.id }}
+              className="w-full max-w-[200px] text-center bg-brand-ink text-brand-cream px-6 py-3 rounded-full text-[10px] uppercase tracking-[0.2em] font-bold hover:bg-brand-gold transition-colors"
+            >
+              Enter Now
+            </Link>
+          ) : (
+            <Link
+              to="/login"
+              search={{ redirect: `/enter?raffle=${r.id}` }}
+              className="w-full max-w-[200px] text-center bg-brand-ink text-brand-cream px-6 py-3 rounded-full text-[10px] uppercase tracking-[0.2em] font-bold hover:bg-brand-gold transition-colors"
+            >
+              Enter Now
+            </Link>
+          )}
           <Link
             to="/raffle/$id"
             params={{ id: r.id }}

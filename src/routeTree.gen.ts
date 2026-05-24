@@ -11,6 +11,8 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WinnersRouteImport } from './routes/winners'
 import { Route as RaffleRouteImport } from './routes/raffle'
+import { Route as MembersRouteImport } from './routes/members'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as EnterRouteImport } from './routes/enter'
 import { Route as CommunityRouteImport } from './routes/community'
 import { Route as AuthRouteImport } from './routes/auth'
@@ -28,6 +30,16 @@ const WinnersRoute = WinnersRouteImport.update({
 const RaffleRoute = RaffleRouteImport.update({
   id: '/raffle',
   path: '/raffle',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MembersRoute = MembersRouteImport.update({
+  id: '/members',
+  path: '/members',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EnterRoute = EnterRouteImport.update({
@@ -78,6 +90,8 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/community': typeof CommunityRoute
   '/enter': typeof EnterRoute
+  '/login': typeof LoginRoute
+  '/members': typeof MembersRoute
   '/raffle': typeof RaffleRouteWithChildren
   '/winners': typeof WinnersRoute
   '/checkout/return': typeof CheckoutReturnRoute
@@ -90,6 +104,8 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/community': typeof CommunityRoute
   '/enter': typeof EnterRoute
+  '/login': typeof LoginRoute
+  '/members': typeof MembersRoute
   '/raffle': typeof RaffleRouteWithChildren
   '/winners': typeof WinnersRoute
   '/checkout/return': typeof CheckoutReturnRoute
@@ -103,6 +119,8 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/community': typeof CommunityRoute
   '/enter': typeof EnterRoute
+  '/login': typeof LoginRoute
+  '/members': typeof MembersRoute
   '/raffle': typeof RaffleRouteWithChildren
   '/winners': typeof WinnersRoute
   '/checkout/return': typeof CheckoutReturnRoute
@@ -117,6 +135,8 @@ export interface FileRouteTypes {
     | '/auth'
     | '/community'
     | '/enter'
+    | '/login'
+    | '/members'
     | '/raffle'
     | '/winners'
     | '/checkout/return'
@@ -129,6 +149,8 @@ export interface FileRouteTypes {
     | '/auth'
     | '/community'
     | '/enter'
+    | '/login'
+    | '/members'
     | '/raffle'
     | '/winners'
     | '/checkout/return'
@@ -141,6 +163,8 @@ export interface FileRouteTypes {
     | '/auth'
     | '/community'
     | '/enter'
+    | '/login'
+    | '/members'
     | '/raffle'
     | '/winners'
     | '/checkout/return'
@@ -154,6 +178,8 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   CommunityRoute: typeof CommunityRoute
   EnterRoute: typeof EnterRoute
+  LoginRoute: typeof LoginRoute
+  MembersRoute: typeof MembersRoute
   RaffleRoute: typeof RaffleRouteWithChildren
   WinnersRoute: typeof WinnersRoute
   CheckoutReturnRoute: typeof CheckoutReturnRoute
@@ -174,6 +200,20 @@ declare module '@tanstack/react-router' {
       path: '/raffle'
       fullPath: '/raffle'
       preLoaderRoute: typeof RaffleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/members': {
+      id: '/members'
+      path: '/members'
+      fullPath: '/members'
+      preLoaderRoute: typeof MembersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/enter': {
@@ -252,6 +292,8 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   CommunityRoute: CommunityRoute,
   EnterRoute: EnterRoute,
+  LoginRoute: LoginRoute,
+  MembersRoute: MembersRoute,
   RaffleRoute: RaffleRouteWithChildren,
   WinnersRoute: WinnersRoute,
   CheckoutReturnRoute: CheckoutReturnRoute,

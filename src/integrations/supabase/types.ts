@@ -14,12 +14,53 @@ export type Database = {
   }
   public: {
     Tables: {
+      entries: {
+        Row: {
+          amount_paid_pence: number
+          created_at: string
+          id: string
+          raffle_id: string
+          source: string
+          tickets: number
+          user_id: string
+        }
+        Insert: {
+          amount_paid_pence?: number
+          created_at?: string
+          id?: string
+          raffle_id: string
+          source: string
+          tickets: number
+          user_id: string
+        }
+        Update: {
+          amount_paid_pence?: number
+          created_at?: string
+          id?: string
+          raffle_id?: string
+          source?: string
+          tickets?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "entries_raffle_id_fkey"
+            columns: ["raffle_id"]
+            isOneToOne: false
+            referencedRelation: "raffles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           created_at: string
           first_name: string | null
           id: string
           publicity_consent: boolean
+          subscription_tier: string | null
+          ticket_balance: number
+          ticket_expiry: string | null
           updated_at: string
         }
         Insert: {
@@ -27,6 +68,9 @@ export type Database = {
           first_name?: string | null
           id: string
           publicity_consent?: boolean
+          subscription_tier?: string | null
+          ticket_balance?: number
+          ticket_expiry?: string | null
           updated_at?: string
         }
         Update: {
@@ -34,6 +78,9 @@ export type Database = {
           first_name?: string | null
           id?: string
           publicity_consent?: boolean
+          subscription_tier?: string | null
+          ticket_balance?: number
+          ticket_expiry?: string | null
           updated_at?: string
         }
         Relationships: []
@@ -56,6 +103,7 @@ export type Database = {
           status: string
           ticket_price: number
           title: string
+          total_ticket_pool: number
           updated_at: string
           winner_city: string | null
           winner_first_name: string | null
@@ -80,6 +128,7 @@ export type Database = {
           status?: string
           ticket_price?: number
           title: string
+          total_ticket_pool?: number
           updated_at?: string
           winner_city?: string | null
           winner_first_name?: string | null
@@ -104,6 +153,7 @@ export type Database = {
           status?: string
           ticket_price?: number
           title?: string
+          total_ticket_pool?: number
           updated_at?: string
           winner_city?: string | null
           winner_first_name?: string | null
@@ -161,6 +211,39 @@ export type Database = {
         }
         Relationships: []
       }
+      ticket_grants: {
+        Row: {
+          amount_paid_pence: number
+          created_at: string
+          id: string
+          source_type: string
+          stripe_event_id: string | null
+          tickets_granted: number
+          tier: string | null
+          user_id: string
+        }
+        Insert: {
+          amount_paid_pence?: number
+          created_at?: string
+          id?: string
+          source_type: string
+          stripe_event_id?: string | null
+          tickets_granted: number
+          tier?: string | null
+          user_id: string
+        }
+        Update: {
+          amount_paid_pence?: number
+          created_at?: string
+          id?: string
+          source_type?: string
+          stripe_event_id?: string | null
+          tickets_granted?: number
+          tier?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -187,6 +270,11 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      enter_draw_with_tickets: {
+        Args: { p_raffle_id: string; p_source?: string; p_tickets: number }
+        Returns: Json
+      }
+      get_draw_ticket_info: { Args: { p_raffle_id: string }; Returns: Json }
       has_active_subscription: {
         Args: { check_env?: string; user_uuid: string }
         Returns: boolean

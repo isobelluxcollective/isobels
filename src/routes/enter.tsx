@@ -84,6 +84,7 @@ const entrantSchema = z.object({
 
 function EnterPage() {
   const { raffle, live } = Route.useLoaderData();
+  const { user, loading: authLoading, signOut } = useAuth();
   const [tab, setTab] = useState<Tab>("subscription");
   const [selectedTier, setSelectedTier] = useState<string>("25");
   const [quantity, setQuantity] = useState(5);
@@ -121,11 +122,74 @@ function EnterPage() {
     );
   }
 
+  const checkoutRedirect = `/enter?raffle=${raffle.id}`;
+
+  if (!authLoading && !user) {
+    return (
+      <>
+        <PaymentTestModeBanner />
+        <section className="bg-brand-cream py-20 min-h-[60vh]">
+          <div className="container mx-auto px-6 max-w-md">
+            <div className="bg-brand-cream border border-brand-taupe p-8 md:p-10 text-center">
+              <p className="text-[10px] uppercase tracking-[0.3em] text-brand-gold font-semibold mb-4">
+                Draw No. {raffle.draw_number}
+              </p>
+              <h1 className="font-serif text-3xl md:text-4xl italic text-brand-ink mb-3">
+                Sign in to continue
+              </h1>
+              <p className="text-sm text-brand-ink/60 mb-8">
+                You need an Isobel account to enter a draw.
+              </p>
+              <div className="flex flex-col gap-3 mb-6">
+                <Link
+                  to="/login"
+                  search={{ redirect: checkoutRedirect }}
+                  className="bg-brand-ink text-brand-cream py-4 rounded-full text-[11px] uppercase tracking-[0.2em] font-bold hover:bg-brand-gold transition-colors"
+                >
+                  Log In
+                </Link>
+                <Link
+                  to="/auth"
+                  search={{ redirect: checkoutRedirect, mode: "signup" }}
+                  className="border border-brand-ink text-brand-ink py-4 rounded-full text-[11px] uppercase tracking-[0.2em] font-bold hover:bg-brand-ink hover:text-brand-cream transition-colors"
+                >
+                  Create an Account
+                </Link>
+              </div>
+              <p className="text-[11px] text-brand-ink/50 leading-relaxed">
+                Why do I need an account? We require an account to deliver your prize and verify your entry.
+              </p>
+            </div>
+          </div>
+        </section>
+      </>
+    );
+  }
+
+  const firstName =
+    (user?.user_metadata?.first_name as string | undefined)?.trim() ||
+    user?.email?.split("@")[0] ||
+    "";
+
   return (
     <>
       <PaymentTestModeBanner />
       <section className="bg-white pt-16 pb-12 border-b border-brand-ink/5">
         <div className="container mx-auto px-6 max-w-4xl text-center">
+          {user && (
+            <p className="text-[11px] text-brand-ink/50 mb-6">
+              Entering as <span className="text-brand-ink/80">{firstName}</span>
+              {" · "}
+              Not you?{" "}
+              <button
+                type="button"
+                onClick={() => signOut()}
+                className="underline underline-offset-2 hover:text-brand-ink transition-colors"
+              >
+                Log out
+              </button>
+            </p>
+          )}
           <p className="text-[10px] uppercase tracking-[0.3em] text-brand-gold font-semibold mb-4">
             Draw No. {raffle.draw_number}
           </p>
@@ -172,13 +236,14 @@ function EnterPage() {
           {tab === "postal" && <PostalPanel raffle={raffle} />}
 
           {tab !== "postal" && (
-            <AuthGate tab={tab} raffle={raffle} selectedTier={selectedTier} quantity={quantity} />
+            <EntrantForm tab={tab} raffle={raffle} selectedTier={selectedTier} quantity={quantity} />
           )}
         </div>
       </section>
     </>
   );
 }
+
 
 function scrollToForm() {
   if (typeof document === "undefined") return;

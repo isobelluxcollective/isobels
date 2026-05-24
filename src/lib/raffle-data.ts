@@ -1,22 +1,29 @@
-import heroPrize from "@/assets/hero-prize.jpg";
 import winner1 from "@/assets/winner-1.jpg";
 import winner2 from "@/assets/winner-2.jpg";
 import winner3 from "@/assets/winner-3.jpg";
 import winner4 from "@/assets/winner-4.jpg";
 
-export const currentRaffle = {
-  drawNumber: "042",
-  title: "The Kelly",
-  italic: "Collection",
-  prizeName: "Hermès Kelly 25",
-  prizeShort: "Hermès Kelly 25 in Epsom Leather",
-  description:
-    "Win a pristine Hermès Kelly 25 in Epsom Leather with gold hardware. A timeless investment piece, hand-sourced from the Paris flagship and presented in its original orange box.",
-  ticketPrice: 10,
-  heroImage: heroPrize,
-  drawDate: "2026-06-30T20:00:00Z",
-  odds: "1 in approximately 6,000 entries",
-  retailValue: "£11,200",
+export type Raffle = {
+  id: string;
+  draw_number: string;
+  title: string;
+  italic: string;
+  prize_name: string;
+  prize_short: string;
+  description: string;
+  ticket_price: number;
+  hero_image_url: string;
+  draw_date: string;
+  odds: string;
+  retail_value: string;
+  status: "draft" | "live" | "closed";
+  featured: boolean;
+  sort_order: number;
+  winner_first_name: string | null;
+  winner_city: string | null;
+  winner_quote: string | null;
+  winner_instagram: string | null;
+  winner_image_url: string | null;
 };
 
 export type Winner = {

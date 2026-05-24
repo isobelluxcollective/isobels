@@ -5,6 +5,15 @@ import { currentRaffle, postalAddress, subscriptionTiers } from "@/lib/raffle-da
 import { cn } from "@/lib/utils";
 import { Minus, Plus, Lock } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
+import { StripeEmbeddedCheckout } from "@/components/stripe-embedded-checkout";
+import { PaymentTestModeBanner } from "@/components/payment-test-mode-banner";
+
+const TIER_PRICE_ID: Record<string, string> = {
+  "10": "tier_collector_monthly",
+  "25": "tier_aficionado_monthly",
+  "50": "tier_icon_monthly",
+};
+const SINGLE_TICKET_PRICE_ID = "single_ticket_each";
 
 export const Route = createFileRoute("/enter")({
   head: () => ({

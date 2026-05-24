@@ -423,10 +423,12 @@ function AuthGate({
 
 function EntrantForm({
   tab,
+  raffle,
   selectedTier,
   quantity,
 }: {
   tab: "subscription" | "oneoff";
+  raffle: Raffle;
   selectedTier: string;
   quantity: number;
 }) {
@@ -435,13 +437,16 @@ function EntrantForm({
   const [checkout, setCheckout] = useState<{
     priceId: string;
     quantity: number;
+    adhocAmountPence?: number;
+    adhocProductName?: string;
+    adhocRaffleId?: string;
   } | null>(null);
 
   const tier = subscriptionTiers.find((t) => t.id === selectedTier);
   const summary =
     tab === "subscription"
       ? `${tier?.label} — £${tier?.price}/mo · ${tier?.entries} entries per draw`
-      : `${quantity} ticket${quantity === 1 ? "" : "s"} — £${(quantity * currentRaffle.ticketPrice).toFixed(2)}`;
+      : `${quantity} ticket${quantity === 1 ? "" : "s"} — £${(quantity * raffle.ticket_price).toFixed(2)}`;
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -465,13 +470,22 @@ function EntrantForm({
       setErrors(fieldErrors);
       return;
     }
-    const priceId =
-      tab === "subscription" ? TIER_PRICE_ID[selectedTier] : SINGLE_TICKET_PRICE_ID;
-    if (!priceId) {
-      setErrors({ form: "Unknown plan. Please select again." });
-      return;
+    if (tab === "subscription") {
+      const priceId = TIER_PRICE_ID[selectedTier];
+      if (!priceId) {
+        setErrors({ form: "Unknown plan. Please select again." });
+        return;
+      }
+      setCheckout({ priceId, quantity: 1 });
+    } else {
+      setCheckout({
+        priceId: "",
+        quantity,
+        adhocAmountPence: Math.round(raffle.ticket_price * 100),
+        adhocProductName: `${raffle.prize_name} — ticket`,
+        adhocRaffleId: raffle.id,
+      });
     }
-    setCheckout({ priceId, quantity: tab === "subscription" ? 1 : quantity });
   }
 
   if (checkout) {
@@ -486,6 +500,9 @@ function EntrantForm({
           quantity={checkout.quantity}
           customerEmail={user?.email ?? undefined}
           userId={user?.id}
+          adhocAmountPence={checkout.adhocAmountPence}
+          adhocProductName={checkout.adhocProductName}
+          adhocRaffleId={checkout.adhocRaffleId}
         />
         <button
           type="button"
@@ -497,6 +514,7 @@ function EntrantForm({
       </div>
     );
   }
+
 
   return (
     <div id="entrant-form" className="bg-white border border-brand-taupe p-8 md:p-12 max-w-2xl mx-auto scroll-mt-24">

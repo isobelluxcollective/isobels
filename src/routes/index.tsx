@@ -60,28 +60,6 @@ function HomePage() {
         </div>
       </section>
 
-      {/* All live raffles grid */}
-      {live.length > 0 && (
-        <section className="py-20 bg-white">
-          <div className="container mx-auto px-6 max-w-7xl">
-            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-4 mb-12">
-              <div>
-                <h2 className="font-serif text-3xl md:text-4xl text-brand-ink">
-                  All Live Draws
-                </h2>
-                <p className="text-[11px] uppercase tracking-widest text-brand-ink/50 mt-2">
-                  {live.length} {live.length === 1 ? "draw" : "draws"} currently open
-                </p>
-              </div>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-              {live.map((r) => (
-                <RaffleCard key={r.id} raffle={r} />
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
 
       {/* How it works */}
       <section className="py-24 bg-brand-cream">

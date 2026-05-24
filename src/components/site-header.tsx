@@ -1,0 +1,77 @@
+import { useState } from "react";
+import { Link } from "@tanstack/react-router";
+import { Menu, X } from "lucide-react";
+
+const navLinks = [
+  { to: "/raffle" as const, label: "Current Raffle" },
+  { to: "/about" as const, label: "About" },
+  { to: "/winners" as const, label: "Past Winners" },
+];
+
+export function SiteHeader() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <header className="sticky top-0 z-50 w-full bg-brand-cream/90 backdrop-blur-md border-b border-brand-ink/5">
+      <div className="flex items-center justify-between px-6 py-4 max-w-7xl mx-auto">
+        <Link to="/" className="font-serif text-3xl tracking-tight italic text-brand-ink">
+          Isobel
+        </Link>
+
+        <nav className="hidden md:flex items-center space-x-10 text-[11px] uppercase tracking-[0.2em] font-medium">
+          {navLinks.map((l) => (
+            <Link
+              key={l.to}
+              to={l.to}
+              className="text-brand-ink hover:text-brand-gold transition-colors"
+              activeProps={{ className: "text-brand-gold" }}
+            >
+              {l.label}
+            </Link>
+          ))}
+          <Link
+            to="/enter"
+            className="bg-brand-ink text-brand-cream px-8 py-3 rounded-full hover:bg-brand-gold transition-colors duration-300"
+          >
+            Enter Now
+          </Link>
+        </nav>
+
+        <button
+          type="button"
+          aria-label={open ? "Close menu" : "Open menu"}
+          aria-expanded={open}
+          onClick={() => setOpen((v) => !v)}
+          className="md:hidden p-2 -mr-2 text-brand-ink"
+        >
+          {open ? <X className="size-5" /> : <Menu className="size-5" />}
+        </button>
+      </div>
+
+      {open && (
+        <div className="md:hidden border-t border-brand-ink/5 bg-brand-cream">
+          <nav className="flex flex-col px-6 py-6 space-y-4 text-sm uppercase tracking-[0.2em] font-medium">
+            {navLinks.map((l) => (
+              <Link
+                key={l.to}
+                to={l.to}
+                onClick={() => setOpen(false)}
+                className="text-brand-ink hover:text-brand-gold py-2"
+                activeProps={{ className: "text-brand-gold" }}
+              >
+                {l.label}
+              </Link>
+            ))}
+            <Link
+              to="/enter"
+              onClick={() => setOpen(false)}
+              className="bg-brand-ink text-brand-cream text-center px-8 py-4 rounded-full mt-2"
+            >
+              Enter Now
+            </Link>
+          </nav>
+        </div>
+      )}
+    </header>
+  );
+}

@@ -8,6 +8,10 @@ interface Props {
   customerEmail?: string;
   userId?: string;
   returnUrl?: string;
+  // Per-raffle ad-hoc pricing (one-time only)
+  adhocAmountPence?: number;
+  adhocProductName?: string;
+  adhocRaffleId?: string;
 }
 
 export function StripeEmbeddedCheckout({
@@ -16,6 +20,9 @@ export function StripeEmbeddedCheckout({
   customerEmail,
   userId,
   returnUrl,
+  adhocAmountPence,
+  adhocProductName,
+  adhocRaffleId,
 }: Props) {
   const fetchClientSecret = async (): Promise<string> => {
     const secret = await createCheckoutSession({
@@ -26,6 +33,9 @@ export function StripeEmbeddedCheckout({
         userId,
         returnUrl: returnUrl || `${window.location.origin}/checkout/return?session_id={CHECKOUT_SESSION_ID}`,
         environment: getStripeEnvironment(),
+        adhocAmountPence,
+        adhocProductName,
+        adhocRaffleId,
       },
     });
     if (!secret) throw new Error("No client secret returned");

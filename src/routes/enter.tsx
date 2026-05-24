@@ -113,11 +113,7 @@ function EnterPage() {
           {tab === "postal" && <PostalPanel />}
 
           {tab !== "postal" && (
-            <EntrantForm
-              tab={tab}
-              selectedTier={selectedTier}
-              quantity={quantity}
-            />
+            <AuthGate tab={tab} selectedTier={selectedTier} quantity={quantity} />
           )}
         </div>
       </section>

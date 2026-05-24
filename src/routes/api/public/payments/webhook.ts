@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
-import { type StripeEnv, verifyWebhook } from "@/lib/stripe.server";
+import { type StripeEnv, createStripeClient, verifyWebhook } from "@/lib/stripe.server";
 
 let _supabase: SupabaseClient | null = null;
 function getSupabase(): SupabaseClient {
@@ -13,6 +13,76 @@ function getSupabase(): SupabaseClient {
   return _supabase;
 }
 
+// Tier mapping (universal — applies to subscriptions and one-off)
+const TIER_TICKETS: Record<string, number> = {
+  collector: 12,
+  aficionado: 30,
+  icon: 60,
+};
+
+function resolveTier(lookupKey?: string | null): { tier: string; tickets: number } | null {
+  if (!lookupKey) return null;
+  if (lookupKey.includes("collector")) return { tier: "collector", tickets: 12 };
+  if (lookupKey.includes("aficionado")) return { tier: "aficionado", tickets: 30 };
+  if (lookupKey.includes("icon")) return { tier: "icon", tickets: 60 };
+  return null;
+}
+
+async function alreadyProcessed(eventId: string): Promise<boolean> {
+  const { data } = await getSupabase()
+    .from("ticket_grants")
+    .select("id")
+    .eq("stripe_event_id", eventId)
+    .maybeSingle();
+  return !!data;
+}
+
+async function recordGrant(args: {
+  userId: string;
+  eventId: string;
+  sourceType: "oneoff" | "subscription_renewal";
+  tier: string;
+  tickets: number;
+  amountPaidPence: number;
+}) {
+  await getSupabase().from("ticket_grants").insert({
+    user_id: args.userId,
+    stripe_event_id: args.eventId,
+    source_type: args.sourceType,
+    tier: args.tier,
+    tickets_granted: args.tickets,
+    amount_paid_pence: args.amountPaidPence,
+  });
+}
+
+async function incrementBalance(userId: string, tickets: number, expiry?: Date | null, tier?: string | null) {
+  const { data: profile } = await getSupabase()
+    .from("profiles")
+    .select("ticket_balance")
+    .eq("id", userId)
+    .maybeSingle();
+  const current = profile?.ticket_balance ?? 0;
+  const update: Record<string, any> = {
+    ticket_balance: current + tickets,
+    updated_at: new Date().toISOString(),
+  };
+  if (expiry !== undefined) update.ticket_expiry = expiry ? expiry.toISOString() : null;
+  if (tier !== undefined) update.subscription_tier = tier;
+  await getSupabase().from("profiles").update(update).eq("id", userId);
+}
+
+async function resetBalance(userId: string, tickets: number, expiry: Date | null, tier: string) {
+  await getSupabase()
+    .from("profiles")
+    .update({
+      ticket_balance: tickets,
+      ticket_expiry: expiry ? expiry.toISOString() : null,
+      subscription_tier: tier,
+      updated_at: new Date().toISOString(),
+    })
+    .eq("id", userId);
+}
+
 async function handleSubscriptionCreated(subscription: any, env: StripeEnv) {
   const userId = subscription.metadata?.userId;
   if (!userId) {
@@ -20,10 +90,8 @@ async function handleSubscriptionCreated(subscription: any, env: StripeEnv) {
     return;
   }
   const item = subscription.items?.data?.[0];
-  const priceId =
-    item?.price?.lookup_key ||
-    item?.price?.metadata?.lovable_external_id ||
-    item?.price?.id;
+  const lookupKey = item?.price?.lookup_key || item?.price?.metadata?.lovable_external_id;
+  const priceId = lookupKey || item?.price?.id;
   const productId = item?.price?.product;
   const periodStart = item?.current_period_start ?? subscription.current_period_start;
   const periodEnd = item?.current_period_end ?? subscription.current_period_end;
@@ -47,10 +115,8 @@ async function handleSubscriptionCreated(subscription: any, env: StripeEnv) {
 
 async function handleSubscriptionUpdated(subscription: any, env: StripeEnv) {
   const item = subscription.items?.data?.[0];
-  const priceId =
-    item?.price?.lookup_key ||
-    item?.price?.metadata?.lovable_external_id ||
-    item?.price?.id;
+  const lookupKey = item?.price?.lookup_key || item?.price?.metadata?.lovable_external_id;
+  const priceId = lookupKey || item?.price?.id;
   const productId = item?.price?.product;
   const periodStart = item?.current_period_start ?? subscription.current_period_start;
   const periodEnd = item?.current_period_end ?? subscription.current_period_end;
@@ -76,10 +142,83 @@ async function handleSubscriptionDeleted(subscription: any, env: StripeEnv) {
     .update({ status: "canceled", updated_at: new Date().toISOString() })
     .eq("stripe_subscription_id", subscription.id)
     .eq("environment", env);
+  const userId = subscription.metadata?.userId;
+  if (userId) {
+    await getSupabase()
+      .from("profiles")
+      .update({ subscription_tier: null, updated_at: new Date().toISOString() })
+      .eq("id", userId);
+  }
+}
+
+async function handleCheckoutCompleted(session: any, env: StripeEnv, eventId: string) {
+  // Only handle one-off ticket purchases here. Subscription mode is handled via invoice.paid.
+  if (session.mode !== "payment") return;
+  const userId = session.metadata?.userId;
+  if (!userId) return;
+
+  if (await alreadyProcessed(eventId)) return;
+
+  // Resolve tier from the line item lookup_key
+  const stripe = createStripeClient(env);
+  const lineItems = await stripe.checkout.sessions.listLineItems(session.id, {
+    limit: 5,
+    expand: ["data.price"],
+  });
+  const first = lineItems.data[0];
+  const lookupKey = (first?.price as any)?.lookup_key;
+  const tierInfo = resolveTier(lookupKey);
+  if (!tierInfo) {
+    console.log("checkout.session.completed: unknown tier, skipping", { lookupKey });
+    return;
+  }
+
+  await incrementBalance(userId, tierInfo.tickets);
+  await recordGrant({
+    userId,
+    eventId,
+    sourceType: "oneoff",
+    tier: tierInfo.tier,
+    tickets: tierInfo.tickets,
+    amountPaidPence: session.amount_total ?? 0,
+  });
+}
+
+async function handleInvoicePaid(invoice: any, env: StripeEnv, eventId: string) {
+  // Subscription renewals (and first payment) → reset balance to tier allocation
+  if (!invoice.subscription) return;
+  if (await alreadyProcessed(eventId)) return;
+
+  const stripe = createStripeClient(env);
+  const subscription = await stripe.subscriptions.retrieve(invoice.subscription as string);
+  const userId = (subscription.metadata as any)?.userId;
+  if (!userId) {
+    console.log("invoice.paid: no userId on subscription", invoice.subscription);
+    return;
+  }
+  const item = subscription.items?.data?.[0] as any;
+  const lookupKey = item?.price?.lookup_key || item?.price?.metadata?.lovable_external_id;
+  const tierInfo = resolveTier(lookupKey);
+  if (!tierInfo) {
+    console.log("invoice.paid: unknown tier", { lookupKey });
+    return;
+  }
+  const periodEnd = item?.current_period_end ?? (subscription as any).current_period_end;
+  const expiry = periodEnd ? new Date(periodEnd * 1000) : null;
+
+  await resetBalance(userId, tierInfo.tickets, expiry, tierInfo.tier);
+  await recordGrant({
+    userId,
+    eventId,
+    sourceType: "subscription_renewal",
+    tier: tierInfo.tier,
+    tickets: tierInfo.tickets,
+    amountPaidPence: invoice.amount_paid ?? 0,
+  });
 }
 
 async function handleWebhook(req: Request, env: StripeEnv) {
-  const event = await verifyWebhook(req, env);
+  const event: any = await verifyWebhook(req, env);
   switch (event.type) {
     case "customer.subscription.created":
       await handleSubscriptionCreated(event.data.object, env);
@@ -89,6 +228,13 @@ async function handleWebhook(req: Request, env: StripeEnv) {
       break;
     case "customer.subscription.deleted":
       await handleSubscriptionDeleted(event.data.object, env);
+      break;
+    case "checkout.session.completed":
+      await handleCheckoutCompleted(event.data.object, env, event.id);
+      break;
+    case "invoice.paid":
+    case "invoice.payment_succeeded":
+      await handleInvoicePaid(event.data.object, env, event.id);
       break;
     default:
       console.log("Unhandled event:", event.type);

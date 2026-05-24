@@ -28,7 +28,7 @@ export const Route = createFileRoute("/")({
 });
 
 function HomePage() {
-  const { featured, live } = Route.useLoaderData();
+  const { featured, live } = Route.useLoaderData() as { featured: Raffle[]; live: Raffle[] };
 
   return (
     <>

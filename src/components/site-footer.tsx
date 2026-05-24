@@ -17,7 +17,7 @@ export function SiteFooter() {
               Our Story
             </Link>
             <Link to="/raffle" className="hover:text-brand-gold transition-colors">
-              Current Raffle
+              Current Raffles
             </Link>
             <Link to="/winners" className="hover:text-brand-gold transition-colors">
               Past Winners

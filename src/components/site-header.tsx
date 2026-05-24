@@ -4,7 +4,7 @@ import { Menu, X } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 
 const navLinks = [
-  { to: "/raffle" as const, label: "Current Raffle" },
+  { to: "/raffle" as const, label: "Current Raffles" },
   { to: "/about" as const, label: "About" },
   { to: "/winners" as const, label: "Past Winners" },
   { to: "/community" as const, label: "Community" },

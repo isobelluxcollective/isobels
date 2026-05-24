@@ -370,7 +370,7 @@ function EntrantForm({
   }
 
   return (
-    <div className="bg-white border border-brand-taupe p-8 md:p-12 max-w-2xl mx-auto">
+    <div id="entrant-form" className="bg-white border border-brand-taupe p-8 md:p-12 max-w-2xl mx-auto scroll-mt-24">
       <h3 className="font-serif text-2xl italic text-brand-ink mb-2">Your details</h3>
       <p className="text-xs text-brand-ink/60 mb-8">{summary}</p>
 

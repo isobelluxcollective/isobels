@@ -90,7 +90,7 @@ export function SiteHeader() {
                 {l.label}
               </Link>
             ))}
-            {user ? (
+            {user && (
               <button
                 type="button"
                 onClick={handleSignOut}
@@ -98,15 +98,6 @@ export function SiteHeader() {
               >
                 Sign Out
               </button>
-            ) : (
-              <Link
-                to="/auth"
-                search={{ redirect: "/enter", mode: "signup" }}
-                onClick={() => setOpen(false)}
-                className="text-brand-ink hover:text-brand-gold py-2"
-              >
-                Sign Up
-              </Link>
             )}
             <div className="flex flex-col gap-3 pt-2">
               {user ? (

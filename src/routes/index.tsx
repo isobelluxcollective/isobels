@@ -52,10 +52,10 @@ function HomePage() {
             </Link>
           </div>
 
-          {featured.length === 0 ? (
+          {live.length === 0 ? (
             <EmptyState />
           ) : (
-            <HeroCarousel raffles={featured} />
+            <HeroCarousel raffles={live} />
           )}
         </div>
       </section>

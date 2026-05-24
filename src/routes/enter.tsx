@@ -314,7 +314,7 @@ function OneOffPanel({
   );
 }
 
-function PostalPanel() {
+function PostalPanel({ raffle }: { raffle: Raffle }) {
   return (
     <div className="bg-white border border-brand-taupe p-10 md:p-14 max-w-2xl mx-auto">
       <span className="text-[10px] uppercase tracking-widest text-brand-gold block mb-4">
@@ -334,7 +334,7 @@ function PostalPanel() {
           <li>· Your first name</li>
           <li>· Your email address</li>
           <li>· Your date of birth (you must be 18+)</li>
-          <li>· The raffle title: <em>{currentRaffle.prizeName}</em></li>
+          <li>· The raffle title: <em>{raffle.prize_name}</em></li>
           <li>· A statement: "I would like one free entry."</li>
         </ul>
       </div>

@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { Menu, X } from "lucide-react";
+import { useAuth } from "@/hooks/use-auth";
 
 const navLinks = [
   { to: "/raffle" as const, label: "Current Raffle" },
@@ -9,9 +10,16 @@ const navLinks = [
   { to: "/community" as const, label: "Community" },
 ];
 
-
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
+
+  async function handleSignOut() {
+    await signOut();
+    setOpen(false);
+    navigate({ to: "/" });
+  }
 
   return (
     <header className="sticky top-0 z-50 w-full bg-brand-cream/90 backdrop-blur-md border-b border-brand-ink/5">
@@ -31,6 +39,23 @@ export function SiteHeader() {
               {l.label}
             </Link>
           ))}
+          {user ? (
+            <button
+              type="button"
+              onClick={handleSignOut}
+              className="text-brand-ink hover:text-brand-gold transition-colors uppercase tracking-[0.2em]"
+            >
+              Sign out
+            </button>
+          ) : (
+            <Link
+              to="/auth"
+              search={{ redirect: "/enter", mode: "signup" }}
+              className="text-brand-ink hover:text-brand-gold transition-colors"
+            >
+              Sign up
+            </Link>
+          )}
           <Link
             to="/enter"
             className="bg-brand-ink text-brand-cream px-8 py-3 rounded-full hover:bg-brand-gold transition-colors duration-300"
@@ -64,6 +89,24 @@ export function SiteHeader() {
                 {l.label}
               </Link>
             ))}
+            {user ? (
+              <button
+                type="button"
+                onClick={handleSignOut}
+                className="text-left text-brand-ink hover:text-brand-gold py-2 uppercase tracking-[0.2em]"
+              >
+                Sign out
+              </button>
+            ) : (
+              <Link
+                to="/auth"
+                search={{ redirect: "/enter", mode: "signup" }}
+                onClick={() => setOpen(false)}
+                className="text-brand-ink hover:text-brand-gold py-2"
+              >
+                Sign up
+              </Link>
+            )}
             <Link
               to="/enter"
               onClick={() => setOpen(false)}

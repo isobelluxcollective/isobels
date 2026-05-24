@@ -4,10 +4,10 @@ import { Menu, X } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 
 const navLinks = [
-  { to: "/raffle" as const, label: "Current Raffles" },
-  { to: "/about" as const, label: "About" },
-  { to: "/winners" as const, label: "Past Winners" },
+  { to: "/raffle" as const, label: "Current Draws" },
   { to: "/community" as const, label: "Community" },
+  { to: "/winners" as const, label: "Past Winners" },
+  { to: "/about" as const, label: "About" },
 ];
 
 export function SiteHeader() {

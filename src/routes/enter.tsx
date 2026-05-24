@@ -362,10 +362,12 @@ function PostalPanel({ raffle }: { raffle: Raffle }) {
 
 function AuthGate({
   tab,
+  raffle,
   selectedTier,
   quantity,
 }: {
   tab: "subscription" | "oneoff";
+  raffle: Raffle;
   selectedTier: string;
   quantity: number;
 }) {
@@ -416,7 +418,7 @@ function AuthGate({
     );
   }
 
-  return <EntrantForm tab={tab} selectedTier={selectedTier} quantity={quantity} />;
+  return <EntrantForm tab={tab} raffle={raffle} selectedTier={selectedTier} quantity={quantity} />;
 }
 
 function EntrantForm({

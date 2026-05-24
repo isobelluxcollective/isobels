@@ -83,9 +83,43 @@ const entrantSchema = z.object({
 });
 
 function EnterPage() {
+  const { raffle, live } = Route.useLoaderData();
   const [tab, setTab] = useState<Tab>("subscription");
   const [selectedTier, setSelectedTier] = useState<string>("25");
   const [quantity, setQuantity] = useState(5);
+
+  if (!raffle) {
+    return (
+      <section className="bg-brand-cream py-20">
+        <div className="container mx-auto px-6 max-w-4xl text-center">
+          <h1 className="font-serif text-4xl md:text-5xl text-brand-ink mb-4">
+            Choose a draw to enter
+          </h1>
+          <p className="text-sm text-brand-ink/60 mb-12">
+            Select one of our live raffles below.
+          </p>
+          <div className="grid md:grid-cols-2 gap-6">
+            {live.map((r: Raffle) => (
+              <Link
+                key={r.id}
+                to="/enter"
+                search={{ raffle: r.id }}
+                className="block bg-white border border-brand-taupe p-8 text-left hover:border-brand-ink transition-colors"
+              >
+                <p className="text-[10px] uppercase tracking-[0.3em] text-brand-gold mb-2">
+                  Draw No. {r.draw_number}
+                </p>
+                <p className="font-serif text-2xl italic text-brand-ink mb-2">
+                  {r.prize_name}
+                </p>
+                <p className="text-xs text-brand-ink/60">£{r.ticket_price} per ticket</p>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <>
@@ -93,13 +127,13 @@ function EnterPage() {
       <section className="bg-white pt-16 pb-12 border-b border-brand-ink/5">
         <div className="container mx-auto px-6 max-w-4xl text-center">
           <p className="text-[10px] uppercase tracking-[0.3em] text-brand-gold font-semibold mb-4">
-            Draw No. {currentRaffle.drawNumber}
+            Draw No. {raffle.draw_number}
           </p>
           <h1 className="font-serif text-4xl md:text-5xl text-brand-ink mb-4">
             Enter the Draw
           </h1>
           <p className="text-sm text-brand-ink/60 max-w-xl mx-auto">
-            Win the <em>{currentRaffle.prizeShort}</em>. Choose how you'd like to enter.
+            Win the <em>{raffle.prize_short}</em>. Choose how you'd like to enter.
           </p>
         </div>
       </section>
@@ -109,7 +143,7 @@ function EnterPage() {
           <div className="grid grid-cols-3 border-y border-brand-taupe mb-12">
             {[
               { id: "postal", label: "Postal", sub: "No purchase necessary" },
-              { id: "oneoff", label: "Single Purchase", sub: "£10 per ticket" },
+              { id: "oneoff", label: "Single Purchase", sub: `£${raffle.ticket_price} per ticket` },
               { id: "subscription", label: "Subscription", sub: "Best value" },
             ].map((t) => (
               <button
@@ -133,12 +167,12 @@ function EnterPage() {
             <SubscriptionPanel selected={selectedTier} onSelect={setSelectedTier} />
           )}
           {tab === "oneoff" && (
-            <OneOffPanel quantity={quantity} onQuantity={setQuantity} />
+            <OneOffPanel raffle={raffle} quantity={quantity} onQuantity={setQuantity} />
           )}
-          {tab === "postal" && <PostalPanel />}
+          {tab === "postal" && <PostalPanel raffle={raffle} />}
 
           {tab !== "postal" && (
-            <AuthGate tab={tab} selectedTier={selectedTier} quantity={quantity} />
+            <AuthGate tab={tab} raffle={raffle} selectedTier={selectedTier} quantity={quantity} />
           )}
         </div>
       </section>
@@ -226,17 +260,19 @@ function SubscriptionPanel({
 }
 
 function OneOffPanel({
+  raffle,
   quantity,
   onQuantity,
 }: {
+  raffle: Raffle;
   quantity: number;
   onQuantity: (n: number) => void;
 }) {
-  const total = quantity * currentRaffle.ticketPrice;
+  const total = quantity * raffle.ticket_price;
   return (
     <div className="bg-white border border-brand-taupe p-10 md:p-14 mb-16 text-center max-w-2xl mx-auto">
       <span className="text-[10px] uppercase tracking-widest text-brand-gold">
-        £{currentRaffle.ticketPrice} per ticket
+        £{raffle.ticket_price} per ticket
       </span>
       <h3 className="font-serif text-3xl italic mt-2 mb-8">How many tickets?</h3>
 
@@ -278,7 +314,7 @@ function OneOffPanel({
   );
 }
 
-function PostalPanel() {
+function PostalPanel({ raffle }: { raffle: Raffle }) {
   return (
     <div className="bg-white border border-brand-taupe p-10 md:p-14 max-w-2xl mx-auto">
       <span className="text-[10px] uppercase tracking-widest text-brand-gold block mb-4">
@@ -298,7 +334,7 @@ function PostalPanel() {
           <li>· Your first name</li>
           <li>· Your email address</li>
           <li>· Your date of birth (you must be 18+)</li>
-          <li>· The raffle title: <em>{currentRaffle.prizeName}</em></li>
+          <li>· The raffle title: <em>{raffle.prize_name}</em></li>
           <li>· A statement: "I would like one free entry."</li>
         </ul>
       </div>
@@ -326,10 +362,12 @@ function PostalPanel() {
 
 function AuthGate({
   tab,
+  raffle,
   selectedTier,
   quantity,
 }: {
   tab: "subscription" | "oneoff";
+  raffle: Raffle;
   selectedTier: string;
   quantity: number;
 }) {
@@ -380,15 +418,17 @@ function AuthGate({
     );
   }
 
-  return <EntrantForm tab={tab} selectedTier={selectedTier} quantity={quantity} />;
+  return <EntrantForm tab={tab} raffle={raffle} selectedTier={selectedTier} quantity={quantity} />;
 }
 
 function EntrantForm({
   tab,
+  raffle,
   selectedTier,
   quantity,
 }: {
   tab: "subscription" | "oneoff";
+  raffle: Raffle;
   selectedTier: string;
   quantity: number;
 }) {
@@ -397,13 +437,16 @@ function EntrantForm({
   const [checkout, setCheckout] = useState<{
     priceId: string;
     quantity: number;
+    adhocAmountPence?: number;
+    adhocProductName?: string;
+    adhocRaffleId?: string;
   } | null>(null);
 
   const tier = subscriptionTiers.find((t) => t.id === selectedTier);
   const summary =
     tab === "subscription"
       ? `${tier?.label} — £${tier?.price}/mo · ${tier?.entries} entries per draw`
-      : `${quantity} ticket${quantity === 1 ? "" : "s"} — £${(quantity * currentRaffle.ticketPrice).toFixed(2)}`;
+      : `${quantity} ticket${quantity === 1 ? "" : "s"} — £${(quantity * raffle.ticket_price).toFixed(2)}`;
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -427,13 +470,22 @@ function EntrantForm({
       setErrors(fieldErrors);
       return;
     }
-    const priceId =
-      tab === "subscription" ? TIER_PRICE_ID[selectedTier] : SINGLE_TICKET_PRICE_ID;
-    if (!priceId) {
-      setErrors({ form: "Unknown plan. Please select again." });
-      return;
+    if (tab === "subscription") {
+      const priceId = TIER_PRICE_ID[selectedTier];
+      if (!priceId) {
+        setErrors({ form: "Unknown plan. Please select again." });
+        return;
+      }
+      setCheckout({ priceId, quantity: 1 });
+    } else {
+      setCheckout({
+        priceId: "",
+        quantity,
+        adhocAmountPence: Math.round(raffle.ticket_price * 100),
+        adhocProductName: `${raffle.prize_name} — ticket`,
+        adhocRaffleId: raffle.id,
+      });
     }
-    setCheckout({ priceId, quantity: tab === "subscription" ? 1 : quantity });
   }
 
   if (checkout) {
@@ -448,6 +500,9 @@ function EntrantForm({
           quantity={checkout.quantity}
           customerEmail={user?.email ?? undefined}
           userId={user?.id}
+          adhocAmountPence={checkout.adhocAmountPence}
+          adhocProductName={checkout.adhocProductName}
+          adhocRaffleId={checkout.adhocRaffleId}
         />
         <button
           type="button"
@@ -459,6 +514,7 @@ function EntrantForm({
       </div>
     );
   }
+
 
   return (
     <div id="entrant-form" className="bg-white border border-brand-taupe p-8 md:p-12 max-w-2xl mx-auto scroll-mt-24">
@@ -552,7 +608,7 @@ function EntrantForm({
         >
           {tab === "subscription"
             ? `Continue — Subscribe £${tier?.price}/mo`
-            : `Continue to Payment — £${(quantity * currentRaffle.ticketPrice).toFixed(2)}`}
+            : `Continue to Payment — £${(quantity * raffle.ticket_price).toFixed(2)}`}
         </button>
         {errors.form && (
           <p className="text-xs text-destructive text-center">{errors.form}</p>

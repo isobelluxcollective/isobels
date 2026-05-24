@@ -3,7 +3,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { z } from "zod";
 import { currentRaffle, postalAddress, subscriptionTiers } from "@/lib/raffle-data";
 import { cn } from "@/lib/utils";
-import { Minus, Plus } from "lucide-react";
+import { Minus, Plus, Lock } from "lucide-react";
+import { useAuth } from "@/hooks/use-auth";
 
 export const Route = createFileRoute("/enter")({
   head: () => ({
@@ -112,11 +113,7 @@ function EnterPage() {
           {tab === "postal" && <PostalPanel />}
 
           {tab !== "postal" && (
-            <EntrantForm
-              tab={tab}
-              selectedTier={selectedTier}
-              quantity={quantity}
-            />
+            <AuthGate tab={tab} selectedTier={selectedTier} quantity={quantity} />
           )}
         </div>
       </section>
@@ -300,6 +297,65 @@ function PostalPanel() {
       </p>
     </div>
   );
+}
+
+function AuthGate({
+  tab,
+  selectedTier,
+  quantity,
+}: {
+  tab: "subscription" | "oneoff";
+  selectedTier: string;
+  quantity: number;
+}) {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="text-center text-xs text-brand-ink/40 py-12">Loading…</div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div
+        id="entrant-form"
+        className="bg-white border border-brand-taupe p-8 md:p-12 max-w-2xl mx-auto scroll-mt-24 text-center"
+      >
+        <div className="size-12 mx-auto mb-6 grid place-items-center rounded-full bg-brand-cream border border-brand-taupe">
+          <Lock className="size-5 text-brand-ink/60" />
+        </div>
+        <h3 className="font-serif text-2xl italic text-brand-ink mb-3">
+          Create an account to continue
+        </h3>
+        <p className="text-sm text-brand-ink/60 max-w-sm mx-auto mb-8 leading-relaxed">
+          Every entry is tied to a personal Isobel account so we can verify winners, manage your
+          subscription, and protect your details.
+        </p>
+        <div className="flex flex-col sm:flex-row gap-3 max-w-sm mx-auto">
+          <Link
+            to="/auth"
+            search={{ redirect: "/enter", mode: "signup" }}
+            className="flex-1 bg-brand-ink text-brand-cream py-4 text-xs uppercase tracking-widest font-bold hover:bg-brand-gold transition-colors"
+          >
+            Create account
+          </Link>
+          <Link
+            to="/auth"
+            search={{ redirect: "/enter", mode: "signin" }}
+            className="flex-1 border border-brand-ink/30 text-brand-ink py-4 text-xs uppercase tracking-widest font-bold hover:border-brand-ink transition-colors"
+          >
+            Sign in
+          </Link>
+        </div>
+        <p className="text-[10px] text-brand-ink/40 mt-6">
+          Free postal entry doesn't require an account.
+        </p>
+      </div>
+    );
+  }
+
+  return <EntrantForm tab={tab} selectedTier={selectedTier} quantity={quantity} />;
 }
 
 function EntrantForm({

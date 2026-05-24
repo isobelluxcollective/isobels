@@ -65,7 +65,7 @@ const raffleInputSchema = z.object({
   sort_order: z.number().int().min(0).max(100000).default(0),
 });
 
-async function assertAdmin(supabase: ReturnType<typeof supabaseAdmin.from> extends never ? never : any, userId: string) {
+async function assertAdmin(userId: string) {
   const { data, error } = await supabaseAdmin
     .from("user_roles")
     .select("role")
@@ -79,7 +79,7 @@ async function assertAdmin(supabase: ReturnType<typeof supabaseAdmin.from> exten
 export const adminListRaffles = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
-    await assertAdmin(context.supabase, context.userId);
+    await assertAdmin(context.userId);
     const { data, error } = await supabaseAdmin
       .from("raffles")
       .select("*")

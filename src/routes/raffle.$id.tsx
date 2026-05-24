@@ -27,9 +27,9 @@ export const Route = createFileRoute("/raffle/$id")({
   },
   notFoundComponent: () => (
     <div className="py-24 text-center">
-      <p className="font-serif text-3xl italic">Raffle not found</p>
+      <p className="font-serif text-3xl italic">Draw not found</p>
       <Link to="/raffle" className="text-xs uppercase tracking-widest underline mt-4 inline-block">
-        Back to live raffles
+        Back to live draws
       </Link>
     </div>
   ),
@@ -93,7 +93,7 @@ function RaffleDetailPage() {
               Enter Now
             </Link>
           ) : (
-            <p className="text-sm text-brand-ink/60 italic">This raffle has closed.</p>
+            <p className="text-sm text-brand-ink/60 italic">This draw has closed.</p>
           )}
         </div>
       </div>

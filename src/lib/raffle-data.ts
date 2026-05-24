@@ -94,8 +94,8 @@ export const subscriptionTiers = [
 
 export const postalAddress = {
   line1: "Free Postal Entry",
-  line2: "Isobel Raffles Ltd.",
-  line3: "PO Box 4421",
-  line4: "London W1A 2BB",
-  line5: "United Kingdom",
+  line2: "Isobel Draws",
+  line3: "[Company Address]",
+  line4: "[City]",
+  line5: "[Postcode]",
 };

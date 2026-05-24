@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { getLiveRaffles } from "@/lib/raffles.functions";
 import type { Raffle } from "@/lib/raffle-data";
 import { useCountdown } from "@/lib/countdown";
-import { useAuth } from "@/hooks/use-auth";
+
 
 export const Route = createFileRoute("/raffle")({
   head: () => ({

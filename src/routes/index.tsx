@@ -187,31 +187,71 @@ function EmptyState() {
 
 function HeroCarousel({ raffles }: { raffles: Raffle[] }) {
   const [index, setIndex] = useState(0);
-  const current = raffles[index] ?? raffles[0];
+  const [paused, setPaused] = useState(false);
 
   useEffect(() => {
-    if (raffles.length <= 1) return;
-    const id = setInterval(() => setIndex((i) => (i + 1) % raffles.length), 7000);
+    if (raffles.length <= 1 || paused) return;
+    const id = setInterval(() => setIndex((i) => (i + 1) % raffles.length), 5000);
     return () => clearInterval(id);
-  }, [raffles.length]);
+  }, [raffles.length, paused]);
+
+  const go = (i: number) => setIndex(((i % raffles.length) + raffles.length) % raffles.length);
 
   return (
-    <div className="relative">
-      <FeaturedSlide raffle={current} />
+    <div
+      className="relative group"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
+      <div className="relative">
+        {raffles.map((r, i) => (
+          <div
+            key={r.id}
+            className={`transition-opacity duration-1000 ease-in-out ${
+              i === index ? "opacity-100 relative" : "opacity-0 absolute inset-0 pointer-events-none"
+            }`}
+            aria-hidden={i !== index}
+          >
+            <FeaturedSlide raffle={r} />
+          </div>
+        ))}
+      </div>
+
       {raffles.length > 1 && (
-        <div className="flex gap-2 justify-center mt-8">
-          {raffles.map((r, i) => (
-            <button
-              key={r.id}
-              type="button"
-              onClick={() => setIndex(i)}
-              aria-label={`Show draw ${i + 1}`}
-              className={`h-1 transition-all ${
-                i === index ? "w-12 bg-brand-ink" : "w-6 bg-brand-ink/20 hover:bg-brand-ink/40"
-              }`}
-            />
-          ))}
-        </div>
+        <>
+          <button
+            type="button"
+            onClick={() => go(index - 1)}
+            aria-label="Previous draw"
+            className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 z-20 text-brand-ink/30 hover:text-brand-ink opacity-0 group-hover:opacity-100 transition-opacity text-3xl font-light leading-none p-2"
+          >
+            ‹
+          </button>
+          <button
+            type="button"
+            onClick={() => go(index + 1)}
+            aria-label="Next draw"
+            className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 z-20 text-brand-ink/30 hover:text-brand-ink opacity-0 group-hover:opacity-100 transition-opacity text-3xl font-light leading-none p-2"
+          >
+            ›
+          </button>
+
+          <div className="absolute bottom-4 left-0 right-0 flex gap-2 justify-center z-20">
+            {raffles.map((r, i) => (
+              <button
+                key={r.id}
+                type="button"
+                onClick={() => setIndex(i)}
+                aria-label={`Show draw ${i + 1}`}
+                className={`rounded-full transition-all ${
+                  i === index
+                    ? "w-2.5 h-2.5 bg-brand-ink/60"
+                    : "w-2 h-2 bg-brand-ink/20 hover:bg-brand-ink/40"
+                }`}
+              />
+            ))}
+          </div>
+        </>
       )}
     </div>
   );

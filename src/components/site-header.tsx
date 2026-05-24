@@ -118,8 +118,8 @@ export function SiteHeader() {
                 Sign Up
               </Link>
               <Link
-                to="/auth"
-                search={{ redirect: "/enter", mode: "signin" }}
+                to="/login"
+                search={{ redirect: "/members" }}
                 onClick={() => setOpen(false)}
                 className="bg-brand-ink text-brand-cream text-center px-8 py-4 rounded-full hover:bg-brand-gold transition-colors"
               >

@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as WinnersRouteImport } from './routes/winners'
 import { Route as RaffleRouteImport } from './routes/raffle'
 import { Route as EnterRouteImport } from './routes/enter'
+import { Route as CommunityRouteImport } from './routes/community'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 
@@ -30,6 +31,11 @@ const EnterRoute = EnterRouteImport.update({
   path: '/enter',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CommunityRoute = CommunityRouteImport.update({
+  id: '/community',
+  path: '/community',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
@@ -44,6 +50,7 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/community': typeof CommunityRoute
   '/enter': typeof EnterRoute
   '/raffle': typeof RaffleRoute
   '/winners': typeof WinnersRoute
@@ -51,6 +58,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/community': typeof CommunityRoute
   '/enter': typeof EnterRoute
   '/raffle': typeof RaffleRoute
   '/winners': typeof WinnersRoute
@@ -59,21 +67,30 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/community': typeof CommunityRoute
   '/enter': typeof EnterRoute
   '/raffle': typeof RaffleRoute
   '/winners': typeof WinnersRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/enter' | '/raffle' | '/winners'
+  fullPaths: '/' | '/about' | '/community' | '/enter' | '/raffle' | '/winners'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/enter' | '/raffle' | '/winners'
-  id: '__root__' | '/' | '/about' | '/enter' | '/raffle' | '/winners'
+  to: '/' | '/about' | '/community' | '/enter' | '/raffle' | '/winners'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/community'
+    | '/enter'
+    | '/raffle'
+    | '/winners'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  CommunityRoute: typeof CommunityRoute
   EnterRoute: typeof EnterRoute
   RaffleRoute: typeof RaffleRoute
   WinnersRoute: typeof WinnersRoute
@@ -102,6 +119,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EnterRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/community': {
+      id: '/community'
+      path: '/community'
+      fullPath: '/community'
+      preLoaderRoute: typeof CommunityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/about': {
       id: '/about'
       path: '/about'
@@ -122,6 +146,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  CommunityRoute: CommunityRoute,
   EnterRoute: EnterRoute,
   RaffleRoute: RaffleRoute,
   WinnersRoute: WinnersRoute,
@@ -129,3 +154,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

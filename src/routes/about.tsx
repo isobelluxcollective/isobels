@@ -94,7 +94,11 @@ function AboutPage() {
                 Isobel is a prize draw company. We source a single, exceptional luxury item —
                 authenticated, pristine, and hand-selected from the world's leading houses. We
                 open a draw. Members enter using tickets. One winner is chosen at random, verified
-                independently, and the piece is theirs.
+                independently, and the prize is theirs.
+              </p>
+              <p>
+                Every winner chooses how to claim — take the piece itself, or its full cash
+                equivalent. The choice is always yours.
               </p>
               <p>
                 No bundles. No compromise pieces. One beautiful object, one fortunate winner,

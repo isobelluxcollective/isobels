@@ -47,12 +47,8 @@ function RaffleListPage() {
 function Card({ r }: { r: Raffle }) {
   const c = useCountdown(r.draw_date);
   return (
-    <Link
-      to="/raffle/$id"
-      params={{ id: r.id }}
-      className="group block bg-white border border-brand-taupe hover:border-brand-ink transition-colors"
-    >
-      <div className="relative">
+    <div className="group block bg-white border border-brand-taupe hover:border-brand-ink transition-colors">
+      <div className="relative overflow-hidden">
         <img
           src={r.hero_image_url || "/hero-prize.jpg"}
           alt={r.prize_short}
@@ -61,15 +57,32 @@ function Card({ r }: { r: Raffle }) {
           height={1000}
           className="w-full aspect-[4/5] object-cover"
         />
-        <div className="absolute top-3 left-3 bg-white px-3 py-1 text-[10px] uppercase tracking-widest text-brand-ink font-bold">
+        <div className="absolute top-3 left-3 bg-white px-3 py-1 text-[10px] uppercase tracking-widest text-brand-ink font-bold z-10">
           £{r.ticket_price}
         </div>
+        <div className="absolute inset-0 bg-brand-ink/45 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center gap-3 px-6">
+          <Link
+            to="/enter"
+            search={{ raffle: r.id }}
+            className="w-full max-w-[200px] text-center bg-brand-ink text-brand-cream px-6 py-3 rounded-full text-[10px] uppercase tracking-[0.2em] font-bold hover:bg-brand-gold transition-colors"
+          >
+            Enter Now
+          </Link>
+          <Link
+            to="/raffle/$id"
+            params={{ id: r.id }}
+            className="w-full max-w-[200px] text-center border border-brand-cream text-brand-cream px-6 py-3 rounded-full text-[10px] uppercase tracking-[0.2em] font-bold hover:bg-brand-cream hover:text-brand-ink transition-colors"
+          >
+            View Details
+          </Link>
+        </div>
       </div>
-      <div className="p-5 space-y-2">
+      <Link to="/raffle/$id" params={{ id: r.id }} className="block p-5 space-y-2">
         <p className="text-[10px] uppercase tracking-widest text-brand-ink/50">Draw {r.draw_number}</p>
         <h3 className="font-serif text-xl italic text-brand-ink leading-tight">{r.prize_name}</h3>
         <p className="text-[11px] text-brand-ink/60 font-mono">Closes in {c.short}</p>
-      </div>
-    </Link>
+      </Link>
+    </div>
   );
 }
+

@@ -5,6 +5,15 @@ import { currentRaffle, postalAddress, subscriptionTiers } from "@/lib/raffle-da
 import { cn } from "@/lib/utils";
 import { Minus, Plus, Lock } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
+import { StripeEmbeddedCheckout } from "@/components/stripe-embedded-checkout";
+import { PaymentTestModeBanner } from "@/components/payment-test-mode-banner";
+
+const TIER_PRICE_ID: Record<string, string> = {
+  "10": "tier_collector_monthly",
+  "25": "tier_aficionado_monthly",
+  "50": "tier_icon_monthly",
+};
+const SINGLE_TICKET_PRICE_ID = "single_ticket_each";
 
 export const Route = createFileRoute("/enter")({
   head: () => ({
@@ -65,6 +74,7 @@ function EnterPage() {
 
   return (
     <>
+      <PaymentTestModeBanner />
       <section className="bg-white pt-16 pb-12 border-b border-brand-ink/5">
         <div className="container mx-auto px-6 max-w-4xl text-center">
           <p className="text-[10px] uppercase tracking-[0.3em] text-brand-gold font-semibold mb-4">
@@ -367,9 +377,12 @@ function EntrantForm({
   selectedTier: string;
   quantity: number;
 }) {
+  const { user } = useAuth();
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [submitting, setSubmitting] = useState(false);
-  const [done, setDone] = useState(false);
+  const [checkout, setCheckout] = useState<{
+    priceId: string;
+    quantity: number;
+  } | null>(null);
 
   const tier = subscriptionTiers.find((t) => t.id === selectedTier);
   const summary =
@@ -399,28 +412,35 @@ function EntrantForm({
       setErrors(fieldErrors);
       return;
     }
-    setSubmitting(true);
-    // Payment integration goes here. For now: simulate.
-    setTimeout(() => {
-      setSubmitting(false);
-      setDone(true);
-    }, 800);
+    const priceId =
+      tab === "subscription" ? TIER_PRICE_ID[selectedTier] : SINGLE_TICKET_PRICE_ID;
+    if (!priceId) {
+      setErrors({ form: "Unknown plan. Please select again." });
+      return;
+    }
+    setCheckout({ priceId, quantity: tab === "subscription" ? 1 : quantity });
   }
 
-  if (done) {
+  if (checkout) {
     return (
-      <div className="bg-white border border-brand-taupe p-10 md:p-14 max-w-2xl mx-auto text-center mt-12">
-        <h3 className="font-serif text-3xl italic text-brand-ink mb-4">Thank you</h3>
-        <p className="text-sm text-brand-ink/70 max-w-md mx-auto">
-          Your details have been received. In the full launch this is where we'd hand you off to
-          Stripe checkout to complete payment. We've recorded your publicity preferences.
-        </p>
-        <Link
-          to="/"
-          className="inline-block mt-8 text-xs uppercase tracking-[0.2em] font-bold border-b border-brand-ink pb-1"
+      <div id="entrant-form" className="max-w-2xl mx-auto scroll-mt-24 mt-12">
+        <div className="bg-white border border-brand-taupe p-6 md:p-8 mb-4">
+          <h3 className="font-serif text-2xl italic text-brand-ink mb-1">Secure checkout</h3>
+          <p className="text-xs text-brand-ink/60">{summary}</p>
+        </div>
+        <StripeEmbeddedCheckout
+          priceId={checkout.priceId}
+          quantity={checkout.quantity}
+          customerEmail={user?.email ?? undefined}
+          userId={user?.id}
+        />
+        <button
+          type="button"
+          onClick={() => setCheckout(null)}
+          className="mt-4 text-xs uppercase tracking-widest text-brand-ink/50 hover:text-brand-ink"
         >
-          Return Home
-        </Link>
+          ← Back to details
+        </button>
       </div>
     );
   }
@@ -513,15 +533,15 @@ function EntrantForm({
 
         <button
           type="submit"
-          disabled={submitting}
           className="w-full bg-brand-ink text-brand-cream py-5 text-xs uppercase tracking-widest font-bold hover:bg-brand-gold transition-colors disabled:opacity-60"
         >
-          {submitting
-            ? "Processing…"
-            : tab === "subscription"
-              ? `Subscribe — £${tier?.price}/mo`
-              : `Continue to Payment — £${(quantity * currentRaffle.ticketPrice).toFixed(2)}`}
+          {tab === "subscription"
+            ? `Continue — Subscribe £${tier?.price}/mo`
+            : `Continue to Payment — £${(quantity * currentRaffle.ticketPrice).toFixed(2)}`}
         </button>
+        {errors.form && (
+          <p className="text-xs text-destructive text-center">{errors.form}</p>
+        )}
 
         <p className="text-[10px] text-brand-ink/40 text-center leading-relaxed">
           Secure checkout powered by Stripe. Your card details are never stored by Isobel.

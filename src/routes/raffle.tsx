@@ -61,7 +61,7 @@ function Card({ r }: { r: Raffle }) {
         <div className="absolute top-3 left-3 bg-white px-3 py-1 text-[10px] uppercase tracking-widest text-brand-ink font-bold z-10">
           £{r.ticket_price}
         </div>
-        <div className="absolute inset-0 bg-brand-ink/45 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center gap-3 px-6">
+        <div className="absolute inset-0 bg-brand-ink/45 opacity-100 group-hover:opacity-100 [@media(hover:hover)]:opacity-0 transition-opacity duration-300 flex flex-col items-center justify-center gap-3 px-6 z-20">
           <Link
             to="/enter"
             search={{ raffle: r.id }}

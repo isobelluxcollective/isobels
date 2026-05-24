@@ -249,25 +249,26 @@ function PostalPanel({ raffle }: { raffle: Raffle }) {
       <span className="text-[10px] uppercase tracking-widest text-brand-gold block mb-4">
         Free Postal Entry
       </span>
-      <h3 className="font-serif text-3xl italic mb-6">No purchase necessary</h3>
+      <h3 className="font-serif text-3xl italic mb-6">Maximum one entry per postcard</h3>
       <p className="text-sm text-brand-ink/70 leading-relaxed mb-8">
-        UK law requires us to offer a free entry route. Send a postcard with the following details
-        and we'll enter you into the current draw at no cost.
+        Isobel offers a free alternative means of entering every draw. To enter by post, write or
+        type the following details on a blank sheet of paper or postcard:
       </p>
       <div className="border-l-2 border-brand-gold pl-6 mb-8">
-        <p className="text-[10px] uppercase tracking-widest text-brand-ink/50 mb-3">
-          On a postcard, include:
-        </p>
         <ul className="text-sm space-y-1.5 text-brand-ink/80">
-          <li>· Your first name</li>
+          <li>· Your full legal name</li>
+          <li>· Your full address (no PO Box addresses accepted)</li>
+          <li>· Your city and postcode</li>
+          <li>· Your telephone number (optional)</li>
           <li>· Your email address</li>
-          <li>· Your date of birth (you must be 18+)</li>
-          <li>· The raffle title: <em>{raffle.prize_name}</em></li>
-          <li>· A statement: "I would like one free entry."</li>
+          <li>
+            · The name and number of the draw you wish to enter (e.g. "Isobel Draw —{" "}
+            <em>{raffle.prize_name}</em>, Draw No. {raffle.draw_number}")
+          </li>
         </ul>
       </div>
       <div className="bg-brand-cream p-6">
-        <p className="text-[10px] uppercase tracking-widest text-brand-ink/50 mb-3">Send to</p>
+        <p className="text-[10px] uppercase tracking-widest text-brand-ink/50 mb-3">Post your entry to</p>
         <address className="not-italic text-sm text-brand-ink/90 leading-relaxed font-medium">
           {postalAddress.line2}<br />
           {postalAddress.line3}<br />
@@ -276,8 +277,11 @@ function PostalPanel({ raffle }: { raffle: Raffle }) {
         </address>
       </div>
       <p className="text-xs text-brand-ink/50 mt-6 leading-relaxed">
-        Postal entries are processed manually and will appear in your Members Portal within 5
-        working days.
+        Please note: a maximum of one entry is accepted per postcard or sheet of paper sent.
+        Multiple entries on a single postcard will not be accepted. Postal entries are processed
+        manually and will appear in your Members Portal within 5 working days of receipt. By
+        entering by post you agree to our Terms and Conditions. No purchase is necessary to enter
+        and postal entrants have an equal chance of winning.
       </p>
     </div>
   );

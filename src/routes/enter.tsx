@@ -608,7 +608,7 @@ function EntrantForm({
         >
           {tab === "subscription"
             ? `Continue — Subscribe £${tier?.price}/mo`
-            : `Continue to Payment — £${(quantity * currentRaffle.ticketPrice).toFixed(2)}`}
+            : `Continue to Payment — £${(quantity * raffle.ticket_price).toFixed(2)}`}
         </button>
         {errors.form && (
           <p className="text-xs text-destructive text-center">{errors.form}</p>

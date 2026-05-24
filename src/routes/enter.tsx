@@ -83,9 +83,9 @@ function EnterPage() {
           {/* Tabs */}
           <div className="flex flex-wrap border-b border-brand-taupe mb-12 justify-center gap-x-8 sm:gap-x-12 gap-y-2">
             {[
-              { id: "subscription", label: "Subscription" },
-              { id: "oneoff", label: "One-off Tickets" },
-              { id: "postal", label: "Free Postal" },
+              { id: "postal", label: "Postal", sub: "No purchase necessary" },
+              { id: "oneoff", label: "Single Purchase", sub: "£10 per ticket" },
+              { id: "subscription", label: "Subscription", sub: "Best value · cancel anytime" },
             ].map((t) => (
               <button
                 key={t.id}

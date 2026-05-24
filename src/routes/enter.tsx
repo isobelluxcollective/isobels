@@ -83,9 +83,43 @@ const entrantSchema = z.object({
 });
 
 function EnterPage() {
+  const { raffle, live } = Route.useLoaderData();
   const [tab, setTab] = useState<Tab>("subscription");
   const [selectedTier, setSelectedTier] = useState<string>("25");
   const [quantity, setQuantity] = useState(5);
+
+  if (!raffle) {
+    return (
+      <section className="bg-brand-cream py-20">
+        <div className="container mx-auto px-6 max-w-4xl text-center">
+          <h1 className="font-serif text-4xl md:text-5xl text-brand-ink mb-4">
+            Choose a draw to enter
+          </h1>
+          <p className="text-sm text-brand-ink/60 mb-12">
+            Select one of our live raffles below.
+          </p>
+          <div className="grid md:grid-cols-2 gap-6">
+            {live.map((r) => (
+              <Link
+                key={r.id}
+                to="/enter"
+                search={{ raffle: r.id }}
+                className="block bg-white border border-brand-taupe p-8 text-left hover:border-brand-ink transition-colors"
+              >
+                <p className="text-[10px] uppercase tracking-[0.3em] text-brand-gold mb-2">
+                  Draw No. {r.draw_number}
+                </p>
+                <p className="font-serif text-2xl italic text-brand-ink mb-2">
+                  {r.prize_name}
+                </p>
+                <p className="text-xs text-brand-ink/60">£{r.ticket_price} per ticket</p>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <>
@@ -93,13 +127,13 @@ function EnterPage() {
       <section className="bg-white pt-16 pb-12 border-b border-brand-ink/5">
         <div className="container mx-auto px-6 max-w-4xl text-center">
           <p className="text-[10px] uppercase tracking-[0.3em] text-brand-gold font-semibold mb-4">
-            Draw No. {currentRaffle.drawNumber}
+            Draw No. {raffle.draw_number}
           </p>
           <h1 className="font-serif text-4xl md:text-5xl text-brand-ink mb-4">
             Enter the Draw
           </h1>
           <p className="text-sm text-brand-ink/60 max-w-xl mx-auto">
-            Win the <em>{currentRaffle.prizeShort}</em>. Choose how you'd like to enter.
+            Win the <em>{raffle.prize_short}</em>. Choose how you'd like to enter.
           </p>
         </div>
       </section>
@@ -109,7 +143,7 @@ function EnterPage() {
           <div className="grid grid-cols-3 border-y border-brand-taupe mb-12">
             {[
               { id: "postal", label: "Postal", sub: "No purchase necessary" },
-              { id: "oneoff", label: "Single Purchase", sub: "£10 per ticket" },
+              { id: "oneoff", label: "Single Purchase", sub: `£${raffle.ticket_price} per ticket` },
               { id: "subscription", label: "Subscription", sub: "Best value" },
             ].map((t) => (
               <button
@@ -133,12 +167,12 @@ function EnterPage() {
             <SubscriptionPanel selected={selectedTier} onSelect={setSelectedTier} />
           )}
           {tab === "oneoff" && (
-            <OneOffPanel quantity={quantity} onQuantity={setQuantity} />
+            <OneOffPanel raffle={raffle} quantity={quantity} onQuantity={setQuantity} />
           )}
-          {tab === "postal" && <PostalPanel />}
+          {tab === "postal" && <PostalPanel raffle={raffle} />}
 
           {tab !== "postal" && (
-            <AuthGate tab={tab} selectedTier={selectedTier} quantity={quantity} />
+            <AuthGate tab={tab} raffle={raffle} selectedTier={selectedTier} quantity={quantity} />
           )}
         </div>
       </section>

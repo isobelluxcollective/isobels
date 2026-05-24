@@ -260,17 +260,19 @@ function SubscriptionPanel({
 }
 
 function OneOffPanel({
+  raffle,
   quantity,
   onQuantity,
 }: {
+  raffle: Raffle;
   quantity: number;
   onQuantity: (n: number) => void;
 }) {
-  const total = quantity * currentRaffle.ticketPrice;
+  const total = quantity * raffle.ticket_price;
   return (
     <div className="bg-white border border-brand-taupe p-10 md:p-14 mb-16 text-center max-w-2xl mx-auto">
       <span className="text-[10px] uppercase tracking-widest text-brand-gold">
-        £{currentRaffle.ticketPrice} per ticket
+        £{raffle.ticket_price} per ticket
       </span>
       <h3 className="font-serif text-3xl italic mt-2 mb-8">How many tickets?</h3>
 

@@ -43,18 +43,29 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
       userId?: string;
       returnUrl: string;
       environment: StripeEnv;
+      // Optional per-raffle ad-hoc pricing (one-time only).
+      // When provided, ignores the stored Stripe price and creates a price_data line item.
+      adhocAmountPence?: number;
+      adhocProductName?: string;
+      adhocRaffleId?: string;
     }) => {
       if (!/^[a-zA-Z0-9_-]+$/.test(data.priceId)) throw new Error("Invalid priceId");
+      if (data.adhocAmountPence !== undefined) {
+        if (!Number.isFinite(data.adhocAmountPence) || data.adhocAmountPence < 50 || data.adhocAmountPence > 1_000_000) {
+          throw new Error("Invalid amount");
+        }
+        if (!data.adhocProductName || data.adhocProductName.length > 200) {
+          throw new Error("Invalid product name");
+        }
+        if (data.adhocRaffleId && !/^[a-zA-Z0-9_-]+$/.test(data.adhocRaffleId)) {
+          throw new Error("Invalid raffleId");
+        }
+      }
       return data;
     },
   )
   .handler(async ({ data }) => {
     const stripe = createStripeClient(data.environment);
-
-    const prices = await stripe.prices.list({ lookup_keys: [data.priceId] });
-    if (!prices.data.length) throw new Error("Price not found");
-    const stripePrice = prices.data[0];
-    const isRecurring = stripePrice.type === "recurring";
 
     const customerId =
       data.customerEmail || data.userId
@@ -63,6 +74,46 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
             userId: data.userId,
           })
         : undefined;
+
+    // Ad-hoc one-time price branch — used for per-raffle single tickets
+    if (data.adhocAmountPence !== undefined) {
+      const session = await stripe.checkout.sessions.create({
+        line_items: [
+          {
+            quantity: data.quantity || 1,
+            price_data: {
+              currency: "gbp",
+              unit_amount: data.adhocAmountPence,
+              product_data: {
+                name: data.adhocProductName!,
+                ...(data.adhocRaffleId && { metadata: { raffleId: data.adhocRaffleId } }),
+              },
+            },
+          },
+        ],
+        mode: "payment",
+        ui_mode: "embedded_page",
+        return_url: data.returnUrl,
+        ...(customerId && { customer: customerId }),
+        payment_intent_data: {
+          description: data.adhocProductName!,
+          ...(data.adhocRaffleId && { metadata: { raffleId: data.adhocRaffleId } }),
+        },
+        ...(data.userId && {
+          metadata: {
+            userId: data.userId,
+            ...(data.adhocRaffleId && { raffleId: data.adhocRaffleId }),
+          },
+        }),
+      });
+      return session.client_secret;
+    }
+
+    // Stored price branch — subscriptions (or shared one-off prices)
+    const prices = await stripe.prices.list({ lookup_keys: [data.priceId] });
+    if (!prices.data.length) throw new Error("Price not found");
+    const stripePrice = prices.data[0];
+    const isRecurring = stripePrice.type === "recurring";
 
     let productDescription: string | undefined;
     if (!isRecurring) {

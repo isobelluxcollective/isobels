@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { z } from "zod";
-import { currentRaffle, postalAddress, subscriptionTiers } from "@/lib/raffle-data";
+import { postalAddress, subscriptionTiers, type Raffle } from "@/lib/raffle-data";
+import { getRaffleById, getLiveRaffles } from "@/lib/raffles.functions";
 import { cn } from "@/lib/utils";
 import { Minus, Plus, Lock } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
@@ -13,26 +14,40 @@ const TIER_PRICE_ID: Record<string, string> = {
   "25": "tier_aficionado_monthly",
   "50": "tier_icon_monthly",
 };
-const SINGLE_TICKET_PRICE_ID = "single_ticket_each";
+
+const searchSchema = z.object({
+  raffle: z.string().uuid().optional(),
+});
 
 export const Route = createFileRoute("/enter")({
+  validateSearch: searchSchema,
+  loaderDeps: ({ search }) => ({ raffle: search.raffle }),
+  loader: async ({ deps }): Promise<{ raffle: Raffle | null; live: Raffle[] }> => {
+    if (deps.raffle) {
+      const r = await getRaffleById({ data: { id: deps.raffle } });
+      if (!r) throw notFound();
+      return { raffle: r, live: [] };
+    }
+    const live = await getLiveRaffles();
+    return { raffle: null, live };
+  },
   head: () => ({
     meta: [
-      { title: "Enter the Draw — Isobel" },
-      {
-        name: "description",
-        content:
-          "Choose a monthly subscription, buy individual tickets, or enter free by post. 5% of profits to charity.",
-      },
-      { property: "og:title", content: "Enter the Isobel Draw" },
-      {
-        property: "og:description",
-        content: "Subscribe monthly, buy one-off tickets, or enter free by post.",
-      },
+      { title: "Enter a Draw — Isobel" },
+      { name: "description", content: "Choose a luxury raffle and enter from £10." },
     ],
   }),
+  notFoundComponent: () => (
+    <div className="py-24 text-center">
+      <p className="font-serif text-3xl italic">Raffle not found</p>
+      <Link to="/raffle" className="text-xs uppercase tracking-widest underline mt-4 inline-block">
+        Back to live raffles
+      </Link>
+    </div>
+  ),
   component: EnterPage,
 });
+
 
 type Tab = "subscription" | "oneoff" | "postal";
 

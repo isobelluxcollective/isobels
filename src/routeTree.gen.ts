@@ -16,6 +16,7 @@ import { Route as CommunityRouteImport } from './routes/community'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as RaffleIdRouteImport } from './routes/raffle.$id'
 import { Route as CheckoutReturnRouteImport } from './routes/checkout.return'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
 
@@ -54,6 +55,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RaffleIdRoute = RaffleIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => RaffleRoute,
+} as any)
 const CheckoutReturnRoute = CheckoutReturnRouteImport.update({
   id: '/checkout/return',
   path: '/checkout/return',
@@ -72,9 +78,10 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/community': typeof CommunityRoute
   '/enter': typeof EnterRoute
-  '/raffle': typeof RaffleRoute
+  '/raffle': typeof RaffleRouteWithChildren
   '/winners': typeof WinnersRoute
   '/checkout/return': typeof CheckoutReturnRoute
+  '/raffle/$id': typeof RaffleIdRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
 export interface FileRoutesByTo {
@@ -83,9 +90,10 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/community': typeof CommunityRoute
   '/enter': typeof EnterRoute
-  '/raffle': typeof RaffleRoute
+  '/raffle': typeof RaffleRouteWithChildren
   '/winners': typeof WinnersRoute
   '/checkout/return': typeof CheckoutReturnRoute
+  '/raffle/$id': typeof RaffleIdRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
 export interface FileRoutesById {
@@ -95,9 +103,10 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/community': typeof CommunityRoute
   '/enter': typeof EnterRoute
-  '/raffle': typeof RaffleRoute
+  '/raffle': typeof RaffleRouteWithChildren
   '/winners': typeof WinnersRoute
   '/checkout/return': typeof CheckoutReturnRoute
+  '/raffle/$id': typeof RaffleIdRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
 export interface FileRouteTypes {
@@ -111,6 +120,7 @@ export interface FileRouteTypes {
     | '/raffle'
     | '/winners'
     | '/checkout/return'
+    | '/raffle/$id'
     | '/api/public/payments/webhook'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -122,6 +132,7 @@ export interface FileRouteTypes {
     | '/raffle'
     | '/winners'
     | '/checkout/return'
+    | '/raffle/$id'
     | '/api/public/payments/webhook'
   id:
     | '__root__'
@@ -133,6 +144,7 @@ export interface FileRouteTypes {
     | '/raffle'
     | '/winners'
     | '/checkout/return'
+    | '/raffle/$id'
     | '/api/public/payments/webhook'
   fileRoutesById: FileRoutesById
 }
@@ -142,7 +154,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   CommunityRoute: typeof CommunityRoute
   EnterRoute: typeof EnterRoute
-  RaffleRoute: typeof RaffleRoute
+  RaffleRoute: typeof RaffleRouteWithChildren
   WinnersRoute: typeof WinnersRoute
   CheckoutReturnRoute: typeof CheckoutReturnRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
@@ -199,6 +211,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/raffle/$id': {
+      id: '/raffle/$id'
+      path: '/$id'
+      fullPath: '/raffle/$id'
+      preLoaderRoute: typeof RaffleIdRouteImport
+      parentRoute: typeof RaffleRoute
+    }
     '/checkout/return': {
       id: '/checkout/return'
       path: '/checkout/return'
@@ -216,13 +235,24 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface RaffleRouteChildren {
+  RaffleIdRoute: typeof RaffleIdRoute
+}
+
+const RaffleRouteChildren: RaffleRouteChildren = {
+  RaffleIdRoute: RaffleIdRoute,
+}
+
+const RaffleRouteWithChildren =
+  RaffleRoute._addFileChildren(RaffleRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   AuthRoute: AuthRoute,
   CommunityRoute: CommunityRoute,
   EnterRoute: EnterRoute,
-  RaffleRoute: RaffleRoute,
+  RaffleRoute: RaffleRouteWithChildren,
   WinnersRoute: WinnersRoute,
   CheckoutReturnRoute: CheckoutReturnRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,

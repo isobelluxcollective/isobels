@@ -3,7 +3,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { z } from "zod";
 import { currentRaffle, postalAddress, subscriptionTiers } from "@/lib/raffle-data";
 import { cn } from "@/lib/utils";
-import { Minus, Plus } from "lucide-react";
+import { Minus, Plus, Lock } from "lucide-react";
+import { useAuth } from "@/hooks/use-auth";
 
 export const Route = createFileRoute("/enter")({
   head: () => ({

@@ -11,8 +11,8 @@ export const Route = createFileRoute("/members")({
   }),
   head: () => ({
     meta: [
-      { title: "Members Portal — Isobel" },
-      { name: "description", content: "Your Isobel members portal: entries, orders and details." },
+      { title: "Members Portal — Isobel's" },
+      { name: "description", content: "Your Isobel's members portal: entries, orders and details." },
     ],
   }),
   component: MembersPage,

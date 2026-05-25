@@ -7,9 +7,9 @@ import { useCountdown } from "@/lib/countdown";
 export const Route = createFileRoute("/raffle")({
   head: () => ({
     meta: [
-      { title: "Live Draws — Isobel" },
-      { name: "description", content: "Browse every live luxury draw at Isobel." },
-      { property: "og:title", content: "Live Draws — Isobel" },
+      { title: "Live Draws — Isobel's" },
+      { name: "description", content: "Browse every live luxury draw at Isobel's." },
+      { property: "og:title", content: "Live Draws — Isobel's" },
       { property: "og:description", content: "All currently open luxury draws." },
     ],
   }),

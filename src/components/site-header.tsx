@@ -25,7 +25,7 @@ export function SiteHeader() {
     <header className="sticky top-0 z-50 w-full bg-brand-cream/90 backdrop-blur-md border-b border-brand-ink/5">
       <div className="flex items-center justify-between px-6 py-4 max-w-7xl mx-auto">
         <Link to="/" className="font-serif text-3xl tracking-tight italic text-brand-ink">
-          Isobel
+          Isobel's
         </Link>
 
         <nav className="hidden md:flex items-center space-x-10 text-[11px] uppercase tracking-[0.2em] font-medium">

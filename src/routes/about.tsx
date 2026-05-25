@@ -4,13 +4,13 @@ import aboutCraft from "@/assets/about-craft.jpg";
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
-      { title: "About Isobel — Luxury Draws with a Conscience" },
+      { title: "About Isobel's — Luxury Draws with a Conscience" },
       {
         name: "description",
         content:
-          "Isobel makes iconic designer pieces accessible through luxury draws, donating 5% of profits to charity.",
+          "Isobel's makes iconic designer pieces accessible through luxury draws, donating 5% of profits to charity.",
       },
-      { property: "og:title", content: "About Isobel" },
+      { property: "og:title", content: "About Isobel's" },
       {
         property: "og:description",
         content: "Luxury draws with a conscience. 5% of profits to charity.",
@@ -33,7 +33,7 @@ function AboutPage() {
             Luxury, <em>shared</em>.
           </h1>
           <p className="text-lg text-brand-ink/70 max-w-2xl mx-auto leading-relaxed italic font-serif">
-            "Some women are born knowing exactly what they want. Isobel was one of them."
+            "Some women are born knowing exactly what they want. Isobel's was one of them."
           </p>
         </div>
       </section>
@@ -50,7 +50,7 @@ function AboutPage() {
           />
           <div className="space-y-5 text-brand-ink/70 leading-relaxed text-base">
             <p>
-              Growing up, Isobel had an eye for the extraordinary — the kind of pieces that
+              Growing up, Isobel's had an eye for the extraordinary — the kind of pieces that
               stopped you in your tracks in a boutique window. The Hermès Kelly. The Chanel Classic
               Flap. The Cartier Love Bracelet. She didn't just admire them. She understood them —
               the craft, the heritage, the meaning behind owning something built to outlast a
@@ -65,13 +65,13 @@ function AboutPage() {
               It was her husband who first said it out loud: what if we changed that?
             </p>
             <p>
-              Together, they built Isobel — not just a business, but a belief. That the most
+              Together, they built Isobel's — not just a business, but a belief. That the most
               beautiful things in the world shouldn't be reserved for the wealthiest handful. That
               every woman who has ever pressed her face to a boutique window and walked away
               deserves a real chance.
             </p>
             <p>
-              Isobel is the face and heart of everything we do. You'll find her introducing every
+              Isobel's is the face and heart of everything we do. You'll find her introducing every
               draw on our social media — sharing the story of each piece, where it came from, why
               it matters, and why you should have a chance to own it.
             </p>
@@ -79,7 +79,7 @@ function AboutPage() {
         </div>
       </section>
 
-      {/* Section 2 — How Isobel Works */}
+      {/* Section 2 — How Isobel's Works */}
       <section id="how-it-works" className="py-24 bg-brand-ink text-brand-cream scroll-mt-20">
         <div className="container mx-auto px-6 max-w-5xl">
           <div className="max-w-3xl mx-auto text-center">
@@ -91,7 +91,7 @@ function AboutPage() {
             </h2>
             <div className="space-y-5 text-base text-brand-cream/70 leading-relaxed text-left md:text-center">
               <p>
-                Isobel is a prize draw company. We source a single, exceptional luxury item —
+                Isobel's is a prize draw company. We source a single, exceptional luxury item —
                 authenticated, pristine, and hand-selected from the world's leading houses. We
                 open a draw. Members enter using tickets. One winner is chosen at random, verified
                 independently, and the prize is theirs.

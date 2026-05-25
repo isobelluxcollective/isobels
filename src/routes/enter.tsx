@@ -45,7 +45,7 @@ export const Route = createFileRoute("/enter")({
   },
   head: () => ({
     meta: [
-      { title: "Enter a Draw — Isobel" },
+      { title: "Enter a Draw — Isobel's" },
       { name: "description", content: "Choose a luxury draw and enter from £10." },
     ],
   }),
@@ -251,7 +251,7 @@ function PostalPanel({ raffle }: { raffle: Raffle }) {
       </span>
       <h3 className="font-serif text-3xl italic mb-6">Maximum one entry per postcard</h3>
       <p className="text-sm text-brand-ink/70 leading-relaxed mb-8">
-        Isobel offers a free alternative means of entering every draw. To enter by post, write or
+        Isobel's offers a free alternative means of entering every draw. To enter by post, write or
         type the following details on a blank sheet of paper or postcard:
       </p>
       <div className="border-l-2 border-brand-gold pl-6 mb-8">
@@ -262,7 +262,7 @@ function PostalPanel({ raffle }: { raffle: Raffle }) {
           <li>· Your telephone number (optional)</li>
           <li>· Your email address</li>
           <li>
-            · The name and number of the draw you wish to enter (e.g. "Isobel Draw —{" "}
+            · The name and number of the draw you wish to enter (e.g. "Isobel's Draw —{" "}
             <em>{raffle.prize_name}</em>, Draw No. {raffle.draw_number}")
           </li>
         </ul>

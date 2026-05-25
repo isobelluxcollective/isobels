@@ -40,20 +40,28 @@ export function SiteHeader() {
             </Link>
           ))}
           {user ? (
-            <button
-              type="button"
-              onClick={handleSignOut}
-              className="text-brand-ink hover:text-brand-gold transition-colors uppercase tracking-[0.2em]"
-            >
-              Sign out
-            </button>
+            <>
+              <Link
+                to="/members"
+                className="text-brand-ink hover:text-brand-gold transition-colors"
+              >
+                My Account
+              </Link>
+              <button
+                type="button"
+                onClick={handleSignOut}
+                className="text-brand-ink hover:text-brand-gold transition-colors uppercase tracking-[0.2em]"
+              >
+                Sign out
+              </button>
+            </>
           ) : (
             <Link
               to="/auth"
               search={{ redirect: "/enter", mode: "signup" }}
               className="text-brand-ink hover:text-brand-gold transition-colors"
             >
-              Sign up
+              Sign Up / Log In
             </Link>
           )}
           <Link

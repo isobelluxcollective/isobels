@@ -80,7 +80,7 @@ function AboutPage() {
       </section>
 
       {/* Section 2 — How Isobel Works */}
-      <section className="py-24 bg-brand-ink text-brand-cream">
+      <section id="how-it-works" className="py-24 bg-brand-ink text-brand-cream scroll-mt-20">
         <div className="container mx-auto px-6 max-w-5xl">
           <div className="max-w-3xl mx-auto text-center">
             <p className="text-[10px] uppercase tracking-[0.3em] text-brand-gold font-semibold mb-6">

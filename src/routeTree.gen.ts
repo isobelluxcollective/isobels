@@ -11,9 +11,11 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WinnersRouteImport } from './routes/winners'
 import { Route as RaffleRouteImport } from './routes/raffle'
+import { Route as PublicRelationsRouteImport } from './routes/public-relations'
 import { Route as MembersRouteImport } from './routes/members'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as EnterRouteImport } from './routes/enter'
+import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CommunityRouteImport } from './routes/community'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AboutRouteImport } from './routes/about'
@@ -32,6 +34,11 @@ const RaffleRoute = RaffleRouteImport.update({
   path: '/raffle',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PublicRelationsRoute = PublicRelationsRouteImport.update({
+  id: '/public-relations',
+  path: '/public-relations',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MembersRoute = MembersRouteImport.update({
   id: '/members',
   path: '/members',
@@ -45,6 +52,11 @@ const LoginRoute = LoginRouteImport.update({
 const EnterRoute = EnterRouteImport.update({
   id: '/enter',
   path: '/enter',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CommunityRoute = CommunityRouteImport.update({
@@ -89,9 +101,11 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
   '/community': typeof CommunityRoute
+  '/contact': typeof ContactRoute
   '/enter': typeof EnterRoute
   '/login': typeof LoginRoute
   '/members': typeof MembersRoute
+  '/public-relations': typeof PublicRelationsRoute
   '/raffle': typeof RaffleRouteWithChildren
   '/winners': typeof WinnersRoute
   '/checkout/return': typeof CheckoutReturnRoute
@@ -103,9 +117,11 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
   '/community': typeof CommunityRoute
+  '/contact': typeof ContactRoute
   '/enter': typeof EnterRoute
   '/login': typeof LoginRoute
   '/members': typeof MembersRoute
+  '/public-relations': typeof PublicRelationsRoute
   '/raffle': typeof RaffleRouteWithChildren
   '/winners': typeof WinnersRoute
   '/checkout/return': typeof CheckoutReturnRoute
@@ -118,9 +134,11 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
   '/community': typeof CommunityRoute
+  '/contact': typeof ContactRoute
   '/enter': typeof EnterRoute
   '/login': typeof LoginRoute
   '/members': typeof MembersRoute
+  '/public-relations': typeof PublicRelationsRoute
   '/raffle': typeof RaffleRouteWithChildren
   '/winners': typeof WinnersRoute
   '/checkout/return': typeof CheckoutReturnRoute
@@ -134,9 +152,11 @@ export interface FileRouteTypes {
     | '/about'
     | '/auth'
     | '/community'
+    | '/contact'
     | '/enter'
     | '/login'
     | '/members'
+    | '/public-relations'
     | '/raffle'
     | '/winners'
     | '/checkout/return'
@@ -148,9 +168,11 @@ export interface FileRouteTypes {
     | '/about'
     | '/auth'
     | '/community'
+    | '/contact'
     | '/enter'
     | '/login'
     | '/members'
+    | '/public-relations'
     | '/raffle'
     | '/winners'
     | '/checkout/return'
@@ -162,9 +184,11 @@ export interface FileRouteTypes {
     | '/about'
     | '/auth'
     | '/community'
+    | '/contact'
     | '/enter'
     | '/login'
     | '/members'
+    | '/public-relations'
     | '/raffle'
     | '/winners'
     | '/checkout/return'
@@ -177,9 +201,11 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   AuthRoute: typeof AuthRoute
   CommunityRoute: typeof CommunityRoute
+  ContactRoute: typeof ContactRoute
   EnterRoute: typeof EnterRoute
   LoginRoute: typeof LoginRoute
   MembersRoute: typeof MembersRoute
+  PublicRelationsRoute: typeof PublicRelationsRoute
   RaffleRoute: typeof RaffleRouteWithChildren
   WinnersRoute: typeof WinnersRoute
   CheckoutReturnRoute: typeof CheckoutReturnRoute
@@ -202,6 +228,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RaffleRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/public-relations': {
+      id: '/public-relations'
+      path: '/public-relations'
+      fullPath: '/public-relations'
+      preLoaderRoute: typeof PublicRelationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/members': {
       id: '/members'
       path: '/members'
@@ -221,6 +254,13 @@ declare module '@tanstack/react-router' {
       path: '/enter'
       fullPath: '/enter'
       preLoaderRoute: typeof EnterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/community': {
@@ -291,9 +331,11 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   AuthRoute: AuthRoute,
   CommunityRoute: CommunityRoute,
+  ContactRoute: ContactRoute,
   EnterRoute: EnterRoute,
   LoginRoute: LoginRoute,
   MembersRoute: MembersRoute,
+  PublicRelationsRoute: PublicRelationsRoute,
   RaffleRoute: RaffleRouteWithChildren,
   WinnersRoute: WinnersRoute,
   CheckoutReturnRoute: CheckoutReturnRoute,

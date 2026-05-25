@@ -24,7 +24,7 @@ export function SiteFooter() {
         {/* Navigation columns */}
         <div className="grid md:grid-cols-5 gap-12 mb-20">
           <div className="md:col-span-1">
-            <div className="font-serif text-4xl text-brand-cream mb-6 italic">Isobel.</div>
+            <div className="font-serif text-4xl text-brand-cream mb-6 italic">Isobel's.</div>
             <div className="flex items-center gap-4 mb-6">
               <a
                 href="https://www.instagram.com/isobel"
@@ -45,7 +45,7 @@ export function SiteFooter() {
                 <TikTokIcon className="size-5" />
               </a>
             </div>
-            <p className="text-[11px] text-brand-cream/40">© 2026 Isobel</p>
+            <p className="text-[11px] text-brand-cream/40">© 2026 Isobel's</p>
           </div>
 
           <div>
@@ -58,7 +58,7 @@ export function SiteFooter() {
           </div>
 
           <div>
-            <h4 className={colHeading}>Isobel</h4>
+            <h4 className={colHeading}>Isobel's</h4>
             <ul className="space-y-3">
               <li><Link to="/about" className={linkCls}>About Us</Link></li>
               <li><a href="/about#how-it-works" className={linkCls}>How It Works</a></li>
@@ -109,16 +109,16 @@ export function SiteFooter() {
         </div>
 
         <div className="mt-20 pt-8 border-t border-brand-cream/5 flex justify-between items-center text-[9px] uppercase tracking-[0.3em]">
-          <span>© {new Date().getFullYear()} Isobel Draws Ltd.</span>
+          <span>© {new Date().getFullYear()} Isobel's Draws Ltd.</span>
           <span>Please Draw Responsibly · 18+</span>
         </div>
         <div className="mt-10 pt-6 border-t border-brand-cream/10">
           <p className="text-[11px] leading-relaxed text-brand-cream/35 max-w-4xl">
-            Please note that Isobel draws are not a charity raffle or lottery but a prize draw.
+            Please note that Isobel's draws are not a charity raffle or lottery but a prize draw.
             Our draws include a free postal method of entry. No purchase is necessary to enter.
             Free postal entry is limited to one entry per postcard — multiple entries submitted on
             a single postcard will not be valid. The winner may elect to receive the cash value
-            equivalent of the prize in lieu of the physical item. Isobel draws are operated in
+            equivalent of the prize in lieu of the physical item. Isobel's draws are operated in
             compliance with UK competition law.
           </p>
         </div>

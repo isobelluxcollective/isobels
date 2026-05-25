@@ -13,10 +13,10 @@ export const Route = createFileRoute("/auth")({
   }),
   head: () => ({
     meta: [
-      { title: "Sign in or Sign up — Isobel" },
+      { title: "Sign in or Sign up — Isobel's" },
       {
         name: "description",
-        content: "Create your Isobel account to enter the draw and manage your subscription.",
+        content: "Create your Isobel's account to enter the draw and manage your subscription.",
       },
     ],
   }),
@@ -128,7 +128,7 @@ function AuthPage() {
             Members
           </p>
           <h1 className="font-serif text-4xl md:text-5xl italic text-brand-ink mb-3">
-            {mode === "signup" ? "Join Isobel" : "Welcome back"}
+            {mode === "signup" ? "Join Isobel's" : "Welcome back"}
           </h1>
           <p className="text-sm text-brand-ink/60">
             {mode === "signup"

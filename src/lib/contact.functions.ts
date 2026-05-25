@@ -15,8 +15,8 @@ export const submitContactEnquiry = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     const subject =
       data.kind === "pr"
-        ? `[PR] Isobel Enquiry — Ref: ${data.reference}`
-        : `[CONTACT] Isobel Enquiry — Ref: ${data.reference}`;
+        ? `[PR] Isobel's Enquiry — Ref: ${data.reference}`
+        : `[CONTACT] Isobel's Enquiry — Ref: ${data.reference}`;
 
     // TODO: wire to hello@isobel.co.uk once domain is confirmed.
     // For now we log the submission server-side so it's retrievable from logs.

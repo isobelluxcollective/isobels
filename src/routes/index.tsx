@@ -7,13 +7,13 @@ import { useCountdown } from "@/lib/countdown";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Isobel — Win Luxury Designer Handbags & Jewellery from £10" },
+      { title: "Isobel's — Win Luxury Designer Handbags & Jewellery from £10" },
       {
         name: "description",
         content:
           "Enter weekly draws to win iconic designer handbags and jewellery. Multiple live draws every week. 5% of profits to charity.",
       },
-      { property: "og:title", content: "Isobel — Luxury Designer Draws" },
+      { property: "og:title", content: "Isobel's — Luxury Designer Draws" },
       {
         property: "og:description",
         content: "Multiple live luxury draws every week. 5% of profits to charity.",
@@ -41,7 +41,7 @@ function HomePage() {
                 Featured Draws
               </p>
               <h1 className="font-serif text-4xl md:text-6xl italic text-brand-ink leading-[0.95]">
-                This week at Isobel
+                This week at Isobel's
               </h1>
             </div>
             <Link
@@ -65,7 +65,7 @@ function HomePage() {
       <section className="py-24 bg-brand-cream">
         <div className="container mx-auto px-6 max-w-7xl">
           <div className="text-center mb-16">
-            <h2 className="font-serif text-4xl text-brand-ink mb-4">How Isobel Works</h2>
+            <h2 className="font-serif text-4xl text-brand-ink mb-4">How Isobel's Works</h2>
             <p className="text-brand-ink/50 uppercase tracking-widest text-[11px]">
               Three steps to your next heirloom
             </p>
@@ -80,7 +80,7 @@ function HomePage() {
               {
                 n: "02",
                 t: "Choose how to enter",
-                d: "Enter from £10 per ticket — the more tickets you hold, the greater your chances. Prefer not to purchase? Every Isobel draw includes a completely free postal entry route, by law and by principle. Postal entries are limited to one entry per postcard sent. No purchase is ever necessary to win.",
+                d: "Enter from £10 per ticket — the more tickets you hold, the greater your chances. Prefer not to purchase? Every Isobel's draw includes a completely free postal entry route, by law and by principle. Postal entries are limited to one entry per postcard sent. No purchase is ever necessary to win.",
               },
               {
                 n: "03",

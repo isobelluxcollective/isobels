@@ -4,16 +4,16 @@ import { pastWinners } from "@/lib/raffle-data";
 export const Route = createFileRoute("/winners")({
   head: () => ({
     meta: [
-      { title: "Past Winners — Isobel Draws" },
+      { title: "Past Winners — Isobel's Draws" },
       {
         name: "description",
         content:
-          "See the women who've won iconic designer pieces with Isobel — Chanel, Cartier, Dior, Van Cleef and more.",
+          "See the women who've won iconic designer pieces with Isobel's — Chanel, Cartier, Dior, Van Cleef and more.",
       },
-      { property: "og:title", content: "Past Winners — Isobel" },
+      { property: "og:title", content: "Past Winners — Isobel's" },
       {
         property: "og:description",
-        content: "Real women, real luxury wins. Browse the Isobel winners archive.",
+        content: "Real women, real luxury wins. Browse the Isobel's winners archive.",
       },
     ],
   }),
@@ -32,7 +32,7 @@ function WinnersPage() {
             Past Winners
           </h1>
           <p className="text-base text-brand-ink/70 leading-relaxed">
-            A small archive of the women who've taken home an Isobel prize. With their permission,
+            A small archive of the women who've taken home an Isobel's prize. With their permission,
             we share their first names and Instagram handles.
           </p>
         </div>

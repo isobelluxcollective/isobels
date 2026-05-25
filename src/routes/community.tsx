@@ -9,16 +9,16 @@ const TAGGED_URL = `https://instagram.com/${INSTAGRAM_HANDLE}/tagged/`;
 export const Route = createFileRoute("/community")({
   head: () => ({
     meta: [
-      { title: "Community — Tagged on Instagram | Isobel" },
+      { title: "Community — Tagged on Instagram | Isobel's" },
       {
         name: "description",
         content:
-          "See past winners and the Isobel community shared on Instagram. Tag @isobel to be featured.",
+          "See past winners and the Isobel's community shared on Instagram. Tag @isobel to be featured.",
       },
-      { property: "og:title", content: "The Isobel Community on Instagram" },
+      { property: "og:title", content: "The Isobel's Community on Instagram" },
       {
         property: "og:description",
-        content: "Tagged photos from past winners and the wider Isobel community.",
+        content: "Tagged photos from past winners and the wider Isobel's community.",
       },
     ],
   }),
@@ -47,13 +47,13 @@ function CommunityPage() {
       <section className="bg-white pt-20 pb-16 border-b border-brand-ink/5">
         <div className="container mx-auto px-6 max-w-4xl text-center">
           <p className="text-[10px] uppercase tracking-[0.3em] text-brand-gold font-semibold mb-4">
-            #IsobelMoments
+            #Isobel'sMoments
           </p>
           <h1 className="font-serif text-4xl md:text-6xl text-brand-ink mb-6">
             Tagged on <em className="text-brand-gold">Instagram</em>
           </h1>
           <p className="text-sm md:text-base text-brand-ink/70 max-w-xl mx-auto leading-relaxed mb-8">
-            A living gallery of the Isobel community — past winners with their prizes
+            A living gallery of the Isobel's community — past winners with their prizes
             and members styling their pieces. Tag{" "}
             <a
               href={INSTAGRAM_URL}

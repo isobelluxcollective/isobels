@@ -58,8 +58,8 @@ function Card({ r }: { r: Raffle }) {
           height={1000}
           className="w-full aspect-[4/5] object-cover"
         />
-        <div className="absolute top-3 left-3 bg-white px-3 py-1 text-[10px] uppercase tracking-widest text-brand-ink font-bold z-10">
-          £{r.ticket_price}
+        <div className="absolute top-3 left-3 bg-white px-3 py-1 text-[10px] uppercase tracking-widest text-brand-ink font-bold font-mono z-10">
+          {String(c.days * 24 + c.hours).padStart(2, "0")}:{String(c.minutes).padStart(2, "0")}:{String(c.seconds).padStart(2, "0")}
         </div>
         <div className="absolute inset-0 bg-brand-ink/45 opacity-100 group-hover:opacity-100 [@media(hover:hover)]:opacity-0 transition-opacity duration-300 flex flex-col items-center justify-center gap-3 px-6 z-20">
           <Link
@@ -78,11 +78,20 @@ function Card({ r }: { r: Raffle }) {
           </Link>
         </div>
       </div>
-      <Link to="/raffle/$id" params={{ id: r.id }} className="block p-5 space-y-2">
-        <p className="text-[10px] uppercase tracking-widest text-brand-ink/50">Draw {r.draw_number}</p>
-        <h3 className="font-serif text-xl italic text-brand-ink leading-tight">{r.prize_name}</h3>
-        <p className="text-[11px] text-brand-ink/60 font-mono">Closes in {c.short}</p>
-      </Link>
+      <div className="p-5 space-y-2">
+        <Link to="/raffle/$id" params={{ id: r.id }} className="block space-y-2">
+          <p className="text-[10px] uppercase tracking-widest text-brand-ink/50">Draw {r.draw_number}</p>
+          <h3 className="font-serif text-xl italic text-brand-ink leading-tight">{r.prize_name}</h3>
+        </Link>
+        <p className="text-[11px] text-brand-ink/60">From £{r.ticket_price} per ticket</p>
+        <Link
+          to="/enter"
+          search={{ postal: true }}
+          className="block text-[10px] text-brand-ink/50 hover:text-brand-ink/70 underline underline-offset-2 transition-colors"
+        >
+          or free via postal entry
+        </Link>
+      </div>
     </div>
   );
 }
